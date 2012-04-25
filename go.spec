@@ -203,10 +203,15 @@ ln -s %{_datadir}/go/src/pkg/runtime/{cgocall,runtime}.h %{buildroot}%{_libdir}/
 %{_libdir}/go/lib/godoc/package.txt
 %{_libdir}/go/lib/godoc/search.html
 %{_libdir}/go/lib/godoc/search.txt
-%{_libdir}/go/pkg/tool/linux_386/8a
-%{_libdir}/go/pkg/tool/linux_386/8c
-%{_libdir}/go/pkg/tool/linux_386/8g
-%{_libdir}/go/pkg/tool/linux_386/8l
+%ifarch %ix86 %arm
+%{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
+%endif
+%ifarch x86_64
+%{_libdir}/go/pkg/tool/linux_%{go_arch}/6*
+%endif
+%ifarch %arm
+%{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
+%endif
 %{_libdir}/go/src/cmd
 %{_libdir}/go/src/pkg
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/tar.a
