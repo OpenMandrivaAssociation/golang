@@ -59,7 +59,6 @@ safety of a static language.
 
 %package doc
 Summary:        Go documentation
-Group:          Documentation/Other
 Requires:       %{name} = %{version}
 Requires:	locales-doc
 
