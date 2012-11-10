@@ -1,0 +1,7 @@
+sources:
+  "go-1.0.tar.bz2:"	19a3d14c78dfb54ceeeedf8ed7426e69298bbc85
+  "godoc.service:"	cce8daaead7aabd403e5508dbe7e9eb731b31a82
+  "go.rpmlintrc:"	1482aafa8f71cda37aeb2daacaf14b03e8fd597d
+  "go.sh:"	868e3e229132770896287781267cf56304a1b0a0
+  "macros.go:"	5da89a2a6e9d3365d6c01a88b3e36713f2fc6b3f
+  "VERSION:"	9415354d3d7581521b77aa5f10610e77f4319106
