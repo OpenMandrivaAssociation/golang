@@ -1,0 +1,2 @@
+addFilter("binaryinfo-readelf-failed")  # go binaries are suposedly ELF-compliant
+addFilter("statically-linked-binary")   # go doesn't yet support dynamic linking
