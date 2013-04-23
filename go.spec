@@ -60,7 +60,6 @@ safety of a static language.
 %package doc
 Summary:        Go documentation
 Requires:       %{name} = %{version}
-Requires:	locales-doc
 
 %description doc
 Go examples and documentation.
