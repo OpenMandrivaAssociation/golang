@@ -18,7 +18,7 @@
 
 Name:           go
 Version:        1
-Release:        1
+Release:        2
 Summary:        A compiled, garbage-collected, concurrent programming language
 License:        BSD-3-Clause
 Group:          Development/Other
@@ -176,8 +176,6 @@ install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
 # break hard links
 rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{cgocall,runtime}.h
 ln -s %{_datadir}/go/src/pkg/runtime/{cgocall,runtime}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
-
-%pre
 
 %post
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
