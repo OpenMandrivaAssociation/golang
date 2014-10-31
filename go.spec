@@ -5,7 +5,7 @@
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
 Version:	1.3.3
-Release:	2
+Release:	3
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
