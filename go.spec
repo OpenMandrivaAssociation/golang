@@ -43,7 +43,7 @@ safety of a static language.
 
 %files
 %doc AUTHORS CONTRIBUTORS LICENSE PATENTS README
-%ifarch %{ix86} %{armx}
+%ifarch %{ix86}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
 %endif
 %ifarch x86_64
