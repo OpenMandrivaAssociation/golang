@@ -1,15 +1,15 @@
 %define debug_package %{nil}
 
-%define goversion go1.2
+%define goversion go1.3
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.2.1
+Version:	1.3.3
 Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
-Source0:	https://go.googlecode.com/files/%{name}%{version}.src.tar.gz
+Source0:	https://storage.googleapis.com/golang/%{name}%{version}.src.tar.gz
 Source1:	%{name}.rpmlintrc
 Source2:	go.sh
 Source3:	macros.go
@@ -17,8 +17,6 @@ Source3:	macros.go
 # stripped from the tarball to save space. TODO: Update contents after version update!
 Source4:	VERSION
 Source5:	godoc.service
-# PATCH-FIX-OPENSUSE add -s flag to 'go install' (don't rebuild/install std libs)
-Patch3:		go-build-dont-reinstall-stdlibs.patch
 # PATCH-FIX-OPENSUSE re-enable build binary only packages (we are binary distro)
 # see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
 Patch4:		allow-binary-only-packages.patch
@@ -44,13 +42,13 @@ safety of a static language.
 
 %files
 %doc AUTHORS CONTRIBUTORS LICENSE PATENTS README
-%ifarch %{ix86} %{arm}
+%ifarch %{ix86} %{armx}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
 %endif
 %ifarch x86_64
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/6*
 %endif
-%ifarch %{arm}
+%ifarch %{armx}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
 %endif
 %{_libdir}/go/src/cmd
@@ -93,6 +91,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/elf.a
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/gosym.a
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/macho.a
+%{_libdir}/go/pkg/linux_%{go_arch}/debug/plan9obj.a
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/pe.a
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding.a
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding/ascii85.a
@@ -193,7 +192,7 @@ safety of a static language.
 %{_libdir}/go/pkg/obj/linux_%{go_arch}/libbio.a
 %{_libdir}/go/pkg/obj/linux_%{go_arch}/libcc.a
 %{_libdir}/go/pkg/obj/linux_%{go_arch}/libgc.a
-%{_libdir}/go/pkg/obj/linux_%{go_arch}/libmach.a
+%{_libdir}/go/pkg/obj/linux_%{go_arch}/liblink.a
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/addr2line
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/cgo
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/dist
@@ -262,8 +261,7 @@ Emacs syntax highlighting scheme for the Go programming language.
 
 %prep
 %setup -q -n %{name}
-%patch3 -p1
-%patch4 -p1
+%apply_patches
 cp %{SOURCE4} .
 cp %{SOURCE5} .
 
@@ -276,7 +274,7 @@ sed -i 's|GOARCH|386|' %{SOURCE3}
 sed -i 's|GOARCH|amd64|' %{SOURCE3}
 %define go_arch amd64
 %endif
-%ifarch %{arm}
+%ifarch %{armx}
 sed -i 's|GOARCH|arm|' %{SOURCE3}
 %define go_arch arm
 %endif
@@ -344,4 +342,3 @@ rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{cgocall,runtime}.h
 ln -s %{_datadir}/go/src/pkg/runtime/{cgocall,runtime}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
 
 strip %{buildroot}%{_bindir}/%{name}
-
