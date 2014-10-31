@@ -30,6 +30,7 @@ BuildRequires:	systemd
 # the version string is pulled into the %godepends macro using the "go version" command.
 Provides:	go-devel = %{goversion}
 Provides:	go-devel-static = %{goversion}
+Provides:	golang = %{version}-%{release}
 Obsoletes:	go-devel < %{goversion}
 Obsoletes:	%{name}-kate < 1.2.1
 
