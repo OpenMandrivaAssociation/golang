@@ -281,6 +281,10 @@ sed -i 's|GOARCH|arm|' %{SOURCE3}
 %endif
 
 %build
+mkdir -p bfd
+ln -s %{_bindir}/ld.bfd bfd/ld
+export PATH=$PWD/bfd:$PATH
+
 export GOROOT="`pwd`"
 export GOROOT_FINAL=%{_libdir}/go
 export GOBIN="$GOROOT/bin"
