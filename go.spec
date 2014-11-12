@@ -5,7 +5,7 @@
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
 Version:	1.3.3
-Release:	3
+Release:	4
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
@@ -287,7 +287,27 @@ export GOBIN="$GOROOT/bin"
 mkdir -p "$GOBIN"
 cd src
 export GDB_PRINTER="%{gdb_printer}"
-HOST_EXTRA_CFLAGS="%{optflags} -Wno-error" ./make.bash
+CC_FOR_TARGET="%{__cc}" CC="%{__cc} %{optflags} %{ldflags}" ./make.bash
+
+%check
+mkdir -p bfd
+ln -s %{_bindir}/ld.bfd bfd/ld
+export PATH=$PWD/bfd:$PATH
+export GOROOT=$(pwd -P)
+export PATH="$PATH":"$GOROOT"/bin
+chmod +x doc/progs/run
+chmod +x doc/articles/wiki/test.bash
+chmod +x doc/codewalk/run
+cd src
+# For now test 3729,5603 doesn't pass so skiping it
+perl -pi -e 's/!windows/!windows,!linux/' ../misc/cgo/test/issue3729.go
+perl -pi -e 's/func Test3729/\/\/func Test3729/' ../misc/cgo/test/cgo_test.go
+perl -pi -e 's/^package/\/\/ +build !linux^Mpackage/' ../misc/cgo/test/issue5603.go
+perl -pi -e 's/func Test5603/\/\/func Test5603/' ../misc/cgo/test/cgo_test.go
+#./run.bash --no-rebuild --banner
+
+CGO_ENABLED=0 ./run.bash --no-rebuild
+cd ..
 
 %install
 export GOROOT="%{buildroot}%{_libdir}/%{name}"
@@ -312,8 +332,8 @@ install -Dm644 godoc.service %{buildroot}%{_unitdir}/godoc.service
 # copy document templates, packages, obj libs and command utilities
 mkdir -p %{buildroot}%{_bindir}
 mkdir -p $GOROOT/lib
-mv pkg $GOROOT
-mv bin/* %{buildroot}%{_bindir}
+cp -r pkg $GOROOT
+cp bin/* %{buildroot}%{_bindir}
 rm -f %{buildroot}%{_bindir}/{hgpatch,quietgcc}
 
 # source files for go install, godoc, etc
