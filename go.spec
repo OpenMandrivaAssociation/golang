@@ -294,9 +294,6 @@ export GDB_PRINTER="%{gdb_printer}"
 CC_FOR_TARGET="%{__cc}" CC="%{__cc} %{optflags} %{ldflags}" ./make.bash
 
 %check
-mkdir -p bfd
-ln -s %{_bindir}/ld.bfd bfd/ld
-export PATH=$PWD/bfd:$PATH
 export GOROOT=$(pwd -P)
 export PATH="$PATH":"$GOROOT"/bin
 chmod +x doc/progs/run
