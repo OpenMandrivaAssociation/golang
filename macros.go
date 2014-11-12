@@ -4,7 +4,7 @@
 #
 
 %go_ver         %(LC_ALL=C rpm -q --qf '%%{epoch}:%%{version}\\n' go | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%go_arch        amd64
+%go_arch        GOARCH
 %go_build_ver   %(go version | sed 's/^go version //' | tr -d ' ')
 
 %go_dir         %{_libdir}/go
