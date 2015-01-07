@@ -1,11 +1,11 @@
 %define debug_package %{nil}
 
-%define goversion go1.3
+%define goversion go1.4
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.3.3
-Release:	5
+Version:	1.4
+Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
@@ -205,8 +205,6 @@ safety of a static language.
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/yacc
 %{_bindir}/go*
 %{_datadir}/go
-%config %{_sysconfdir}/bash_completion.d/go
-%config %{_sysconfdir}/profile.d/go.sh
 %config %{_sysconfdir}/rpm/macros.go
 %{_unitdir}/godoc.service
 
@@ -231,35 +229,6 @@ Go examples and documentation.
 %files doc
 %doc doc misc
 
-#----------------------------------------------------------------------------
-
-%package vim
-Summary:	Go syntax files for Vim
-Group:		Editors
-Requires:	%{name} = %{EVRD}
-
-%description vim
-Vim syntax highlighting scheme for the Go programming language.
-
-%files vim
-%dir %{_datadir}/vim
-%{_datadir}/vim/*
-
-#----------------------------------------------------------------------------
-
-%package emacs
-Summary:	Go language syntax files for Emacs
-Group:		Editors
-Requires:	%{name} = %{version}
-
-%description emacs
-Emacs syntax highlighting scheme for the Go programming language.
-
-%files emacs
-%{_datadir}/emacs/site-lisp/go-mode*
-
-#----------------------------------------------------------------------------
-
 %prep
 %setup -q -n %{name}
 %apply_patches
@@ -268,15 +237,12 @@ cp %{SOURCE5} .
 
 # setup go_arch (BSD-like scheme)
 %ifarch %{ix86}
-sed -i 's|GOARCH|386|' %{SOURCE3}
 %define go_arch 386
 %endif
 %ifarch x86_64
-sed -i 's|GOARCH|amd64|' %{SOURCE3}
 %define go_arch amd64
 %endif
 %ifarch %{armx}
-sed -i 's|GOARCH|arm|' %{SOURCE3}
 %define go_arch arm
 %endif
 
@@ -312,19 +278,7 @@ cd ..
 
 %install
 export GOROOT="%{buildroot}%{_libdir}/%{name}"
-install -Dm644 misc/bash/go %{buildroot}%{_sysconfdir}/bash_completion.d/go
 install -Dm644 %{SOURCE2} %{buildroot}%{_sysconfdir}/profile.d/go.sh
-install -Dm644 misc/emacs/go-mode-load.el %{buildroot}%{_datadir}/emacs/site-lisp/go-mode-load.el
-install -Dm644 misc/emacs/go-mode.el %{buildroot}%{_datadir}/emacs/site-lisp/go-mode.el
-install -Dm644 misc/vim/autoload/go/complete.vim %{buildroot}%{_datadir}/vim/site/autoload/go/complete.vim
-install -d %{buildroot}%{_datadir}/vim/site/ftplugin/go
-install -Dm644 misc/vim/ftplugin/go/{fmt,import}.vim %{buildroot}%{_datadir}/vim/site/ftplugin/go/
-install -Dm644 misc/vim/ftplugin/go.vim %{buildroot}%{_datadir}/vim/site/ftplugin/go/
-install -Dm644 misc/vim/indent/go.vim %{buildroot}%{_datadir}/vim/site/indent/go.vim
-install -Dm644 misc/vim/plugin/godoc.vim %{buildroot}%{_datadir}/vim/site/plugin/godoc.vim
-install -Dm644 misc/vim/syntax/godoc.vim %{buildroot}%{_datadir}/vim/site/syntax/godoc.vim
-install -Dm644 misc/vim/syntax/go.vim %{buildroot}%{_datadir}/vim/site/syntax/go.vim
-install -Dm644 misc/vim/ftdetect/gofiletype.vim %{buildroot}%{_datadir}/vim/site/ftdetect/gofiletype.vim
 
 # godoc service
 mkdir -p %{buildroot}%{_unitdir}
@@ -356,8 +310,9 @@ rm -f misc/goplay/{goplay,*.6,*.8}
 rm -rf misc/windows
 rm -rf misc/cgo/test/{_*,*.o,*.out,*.6,*.8}
 
-# install RPM macros ($GOARCH prepared in %%prep section)
+# install RPM macros
 install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
+sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/rpm/macros.go
 
 # break hard links
 rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{cgocall,runtime}.h
