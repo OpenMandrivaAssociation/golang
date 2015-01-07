@@ -59,6 +59,20 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/bufio.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bytes.a
 %{_libdir}/go/pkg/linux_%{go_arch}/cgocall.h
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/goobj.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/objfile.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/rsc.io/arm/armasm.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/rsc.io/x86/x86asm.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/commands.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/driver.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/fetch.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/plugin.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/profile.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/report.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/svg.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/symbolizer.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/symbolz.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/tempfile.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/bzip2.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/flate.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/gzip.a
@@ -110,6 +124,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/expvar.a
 %{_libdir}/go/pkg/linux_%{go_arch}/flag.a
 %{_libdir}/go/pkg/linux_%{go_arch}/fmt.a
+%{_libdir}/go/pkg/linux_%{go_arch}/funcdata.h
 %{_libdir}/go/pkg/linux_%{go_arch}/go/ast.a
 %{_libdir}/go/pkg/linux_%{go_arch}/go/build.a
 %{_libdir}/go/pkg/linux_%{go_arch}/go/doc.a
@@ -133,6 +148,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/image/jpeg.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/png.a
 %{_libdir}/go/pkg/linux_%{go_arch}/index/suffixarray.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
 %{_libdir}/go/pkg/linux_%{go_arch}/log.a
@@ -150,6 +166,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/net/http/fcgi.a
 %{_libdir}/go/pkg/linux_%{go_arch}/net/http/httptest.a
 %{_libdir}/go/pkg/linux_%{go_arch}/net/http/httputil.a
+%{_libdir}/go/pkg/linux_%{go_arch}/net/http/internal.a
 %{_libdir}/go/pkg/linux_%{go_arch}/net/http/pprof.a
 %{_libdir}/go/pkg/linux_%{go_arch}/net/mail.a
 %{_libdir}/go/pkg/linux_%{go_arch}/net/rpc.a
@@ -185,6 +202,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/text/tabwriter.a
 %{_libdir}/go/pkg/linux_%{go_arch}/text/template.a
 %{_libdir}/go/pkg/linux_%{go_arch}/text/template/parse.a
+%{_libdir}/go/pkg/linux_%{go_arch}/textflag.h
 %{_libdir}/go/pkg/linux_%{go_arch}/time.a
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode.a
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode/utf16.a
@@ -206,6 +224,7 @@ safety of a static language.
 %{_bindir}/go*
 %{_datadir}/go
 %config %{_sysconfdir}/rpm/macros.go
+%config %{_sysconfdir}/profile.d/go.sh
 %{_unitdir}/godoc.service
 
 %post
