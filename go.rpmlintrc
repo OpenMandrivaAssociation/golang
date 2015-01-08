@@ -1,3 +1,4 @@
 addFilter("binaryinfo-readelf-failed")  # go binaries are suposedly ELF-compliant
 addFilter("statically-linked-binary")   # go doesn't yet support dynamic linking
+addFilter("unstripped-binary-or-object") # doesnt like stripping
 addFilter("devel-file-in-non-devel-package")
