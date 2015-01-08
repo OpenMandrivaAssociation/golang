@@ -1,4 +1,4 @@
-%define debug_package %{nil}
+%define dont_strip 1
 
 %define goversion go1.4
 
