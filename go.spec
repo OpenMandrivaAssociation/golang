@@ -1,7 +1,5 @@
 %define debug_package %{nil}
-%define __debug_install_post %{nil}
-%define dont_remove_rpath 1
-%define dont_check_elf_files 1
+%define __debug_install_post echo
 
 %define goversion go1.4
 
