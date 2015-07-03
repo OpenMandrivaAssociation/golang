@@ -267,6 +267,8 @@ cp %{SOURCE5} .
 %endif
 
 %build
+export CFLAGS="$CFLAGS -fno-strict-aliasing"
+
 mkdir -p bfd
 ln -s %{_bindir}/ld.bfd bfd/ld
 export PATH=$PWD/bfd:$PATH
