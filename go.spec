@@ -24,6 +24,7 @@ Patch4:		allow-binary-only-packages.patch
 BuildRequires:	bison
 BuildRequires:	ed
 BuildRequires:	systemd
+BuildRequires:	diffutils
 # We need to manually specify the release version string here. All code compiled
 # with this package will have the release string specified by the VERSION file
 # in this source tarball baked into it, libs compiled with a different version
