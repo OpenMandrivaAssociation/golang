@@ -53,8 +53,7 @@ safety of a static language.
 %ifarch %{armx}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
 %endif
-%{_libdir}/go/src/cmd
-%{_libdir}/go/src/pkg
+%{_libdir}/go/src
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/tar.a
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/zip.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bufio.a
@@ -267,7 +266,7 @@ cp %{SOURCE5} .
 %endif
 
 %build
-export CFLAGS="$CFLAGS -fno-strict-aliasing"
+export CFLAGS="$CFLAGS -fno-strict-aliasing -fuse-ld=bfd"
 
 mkdir -p bfd
 ln -s %{_bindir}/ld.bfd bfd/ld
@@ -279,7 +278,7 @@ export GOBIN="$GOROOT/bin"
 mkdir -p "$GOBIN"
 cd src
 export GDB_PRINTER="%{gdb_printer}"
-CC_FOR_TARGET="%{__cc}" CC="%{__cc} %{optflags} %{ldflags}" ./make.bash
+CC_FOR_TARGET="%{__cc}" CC="%{__cc}" ./make.bash
 
 %check
 export GOROOT=$(pwd -P)
@@ -318,9 +317,7 @@ install -d %{buildroot}%{_datadir}/go
 for ext in *.{go,c,h,s,S,py}; do
   find src -name ${ext} -exec install -Dm644 \{\} %{buildroot}%{_datadir}/go/\{\} \;
 done
-mkdir -p $GOROOT/src
-ln -s /usr/share/go/src/pkg $GOROOT/src/pkg
-ln -s /usr/share/go/src/cmd $GOROOT/src/cmd
+ln -s /usr/share/go/src $GOROOT/src
 
 # documentation and examples
 # fix documetation permissions (rpmlint warning)
@@ -337,7 +334,8 @@ install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
 sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/rpm/macros.go
 
 # break hard links
-rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{cgocall,runtime}.h
-ln -s %{_datadir}/go/src/pkg/runtime/{cgocall,runtime}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
+rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
+ln -s %{_datadir}/go/src/cmd/ld/textflag.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}
+ln -s %{_datadir}/go/src/runtime/{runtime,cgocall,funcdata}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
 
 strip %{buildroot}%{_bindir}/%{name}
