@@ -1,12 +1,15 @@
 %define debug_package %{nil}
 %define __debug_install_post echo
 
+# eol 'fix' corrupts some .a files makes 6l give 'out of memory'
+%define dont_fix_eol 1
+
 %define goversion go1.4
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
 Version:	1.4.2
-Release:	2
+Release:	3
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
@@ -14,9 +17,6 @@ Source0:	https://storage.googleapis.com/golang/%{name}%{version}.src.tar.gz
 Source1:	%{name}.rpmlintrc
 Source2:	go.sh
 Source3:	macros.go
-# This file is otherwise generated at build-time from the .hg directory, which was
-# stripped from the tarball to save space. TODO: Update contents after version update!
-Source4:	VERSION
 Source5:	godoc.service
 # PATCH-FIX-OPENSUSE re-enable build binary only packages (we are binary distro)
 # see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
@@ -252,7 +252,6 @@ Go examples and documentation.
 %prep
 %setup -q -n %{name}
 %apply_patches
-cp %{SOURCE4} .
 cp %{SOURCE5} .
 
 # setup go_arch (BSD-like scheme)
@@ -267,19 +266,17 @@ cp %{SOURCE5} .
 %endif
 
 %build
-export CFLAGS="$CFLAGS -fno-strict-aliasing -fuse-ld=bfd"
-
-mkdir -p bfd
-ln -s %{_bindir}/ld.bfd bfd/ld
-export PATH=$PWD/bfd:$PATH
-
+export CFLAGS="$CFLAGS -fno-strict-aliasing"
 export GOROOT="`pwd`"
 export GOROOT_FINAL=%{_libdir}/go
 export GOBIN="$GOROOT/bin"
 mkdir -p "$GOBIN"
 cd src
-export GDB_PRINTER="%{gdb_printer}"
 CC_FOR_TARGET="%{__cc}" CC="%{__cc}" ./make.bash
+
+%ifarch %ix86
+strip $GOBIN/go # bnc#818502
+%endif
 
 %check
 export GOROOT=$(pwd -P)
@@ -306,19 +303,20 @@ install -Dm644 %{SOURCE2} %{buildroot}%{_sysconfdir}/profile.d/go.sh
 mkdir -p %{buildroot}%{_unitdir}
 install -Dm644 godoc.service %{buildroot}%{_unitdir}/godoc.service
 
-# copy document templates, packages, obj libs and command utilities
-mkdir -p %{buildroot}%{_bindir}
-mkdir -p $GOROOT/lib
-cp -r pkg $GOROOT
-cp bin/* %{buildroot}%{_bindir}
-rm -f %{buildroot}%{_bindir}/{hgpatch,quietgcc}
-
 # source files for go install, godoc, etc
 install -d %{buildroot}%{_datadir}/go
 for ext in *.{go,c,h,s,S,py}; do
   find src -name ${ext} -exec install -Dm644 \{\} %{buildroot}%{_datadir}/go/\{\} \;
 done
+mkdir -p $GOROOT
 ln -s /usr/share/go/src $GOROOT/src
+
+# copy document templates, packages, obj libs and command utilities
+mkdir -p %{buildroot}%{_bindir}
+mkdir -p $GOROOT/lib
+cp -Rp pkg $GOROOT
+cp bin/* %{buildroot}%{_bindir}
+rm -f %{buildroot}%{_bindir}/{hgpatch,quietgcc}
 
 # documentation and examples
 # fix documetation permissions (rpmlint warning)
@@ -339,4 +337,3 @@ rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,run
 ln -s %{_datadir}/go/src/cmd/ld/textflag.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}
 ln -s %{_datadir}/go/src/runtime/{runtime,cgocall,funcdata}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
 
-strip %{buildroot}%{_bindir}/%{name}
