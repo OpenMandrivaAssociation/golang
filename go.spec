@@ -272,7 +272,17 @@ export GOROOT_FINAL=%{_libdir}/go
 export GOBIN="$GOROOT/bin"
 mkdir -p "$GOBIN"
 cd src
-CC_FOR_TARGET="%{__cc}" CC="%{__cc}" ./make.bash
+
+export CC_FOR_TARGET="%{__cc}"
+export CC="%{__cc}"
+%if %mdvver >= 201500
+%ifarch %ix86
+export CC_FOR_TARGET="gcc"
+export CC="gcc"
+%endif
+%endif
+
+./make.bash
 
 %ifarch %ix86
 strip $GOBIN/go # bnc#818502
