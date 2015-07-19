@@ -9,7 +9,7 @@
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
 Version:	1.4.2
-Release:	3
+Release:	4
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
