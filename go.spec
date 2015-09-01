@@ -22,6 +22,7 @@ Source5:	godoc.service
 # see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
 Patch4:		allow-binary-only-packages.patch
 BuildRequires:	bison
+BuildRequires:	gcc-go
 BuildRequires:	ed
 BuildRequires:	systemd
 BuildRequires:	diffutils
