@@ -4,12 +4,12 @@
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
 
-%define goversion go1.4
+%define goversion go1.5
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.4.2
-Release:	4
+Version:	1.5
+Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
@@ -44,36 +44,21 @@ run-time reflection. It feels like a dynamic language but has the speed and
 safety of a static language.
 
 %files
-%doc AUTHORS CONTRIBUTORS LICENSE PATENTS README
+%doc AUTHORS CONTRIBUTORS LICENSE PATENTS
 %ifarch %{ix86}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
-%endif
-%ifarch x86_64
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/6*
 %endif
 %ifarch %{armx}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
 %endif
 %{_libdir}/go/src
+%{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/tar.a
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/zip.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bufio.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bytes.a
 %{_libdir}/go/pkg/linux_%{go_arch}/cgocall.h
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/goobj.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/objfile.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/rsc.io/arm/armasm.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/internal/rsc.io/x86/x86asm.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/commands.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/driver.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/fetch.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/plugin.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/profile.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/report.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/svg.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/symbolizer.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/symbolz.a
-%{_libdir}/go/pkg/linux_%{go_arch}/cmd/pprof/internal/tempfile.a
+%{_libdir}/go/pkg/linux_%{go_arch}/cmd/*
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/bzip2.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/flate.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/gzip.a
@@ -123,17 +108,12 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding/xml.a
 %{_libdir}/go/pkg/linux_%{go_arch}/errors.a
 %{_libdir}/go/pkg/linux_%{go_arch}/expvar.a
+%{_libdir}/go/pkg/linux_%{go_arch}/net.a
 %{_libdir}/go/pkg/linux_%{go_arch}/flag.a
 %{_libdir}/go/pkg/linux_%{go_arch}/fmt.a
 %{_libdir}/go/pkg/linux_%{go_arch}/funcdata.h
-%{_libdir}/go/pkg/linux_%{go_arch}/go/ast.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/build.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/doc.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/format.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/parser.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/printer.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/scanner.a
-%{_libdir}/go/pkg/linux_%{go_arch}/go/token.a
+%{_libdir}/go/pkg/linux_%{go_arch}/go/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/go/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash/adler32.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash/crc32.a
@@ -148,8 +128,10 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/image/gif.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/jpeg.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/png.a
+%{_libdir}/go/pkg/linux_%{go_arch}/image/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/index/suffixarray.a
-%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
 %{_libdir}/go/pkg/linux_%{go_arch}/log.a
@@ -159,22 +141,8 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/math/cmplx.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/rand.a
 %{_libdir}/go/pkg/linux_%{go_arch}/mime.a
-%{_libdir}/go/pkg/linux_%{go_arch}/mime/multipart.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/cgi.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/cookiejar.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/fcgi.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/httptest.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/httputil.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/internal.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/http/pprof.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/mail.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/rpc.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/rpc/jsonrpc.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/smtp.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/textproto.a
-%{_libdir}/go/pkg/linux_%{go_arch}/net/url.a
+%{_libdir}/go/pkg/linux_%{go_arch}/net/*
+%{_libdir}/go/pkg/linux_%{go_arch}/mime/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os/exec.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os/signal.a
@@ -186,10 +154,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/regexp/syntax.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime.h
-%{_libdir}/go/pkg/linux_%{go_arch}/runtime/cgo.a
-%{_libdir}/go/pkg/linux_%{go_arch}/runtime/debug.a
-%{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof.a
-%{_libdir}/go/pkg/linux_%{go_arch}/runtime/race.a
+%{_libdir}/go/pkg/linux_%{go_arch}/runtime/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/sort.a
 %{_libdir}/go/pkg/linux_%{go_arch}/strconv.a
 %{_libdir}/go/pkg/linux_%{go_arch}/strings.a
@@ -208,20 +173,10 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode.a
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode/utf16.a
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode/utf8.a
-%{_libdir}/go/pkg/obj/linux_%{go_arch}/lib9.a
-%{_libdir}/go/pkg/obj/linux_%{go_arch}/libbio.a
-%{_libdir}/go/pkg/obj/linux_%{go_arch}/libcc.a
-%{_libdir}/go/pkg/obj/linux_%{go_arch}/libgc.a
-%{_libdir}/go/pkg/obj/linux_%{go_arch}/liblink.a
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/addr2line
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/cgo
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/dist
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/fix
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/nm
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/objdump
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/pack
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/pprof
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/yacc
+%{_libdir}/go/pkg/bootstrap/src/bootstrap/*
+%{_libdir}/go/pkg/tool/linux_%{go_arch}/*
+%{_libdir}/go/pkg/bootstrap/bin/*
+%{_libdir}/go/pkg/include/*.h
 %{_bindir}/go*
 %{_datadir}/go
 %config %{_sysconfdir}/rpm/macros.go
@@ -282,7 +237,7 @@ export CC="gcc"
 %endif
 %endif
 
-./make.bash
+GOROOT_BOOTSTRAP=/usr ./make.bash
 
 %ifarch %ix86
 strip $GOBIN/go # bnc#818502
@@ -343,7 +298,7 @@ install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
 sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/rpm/macros.go
 
 # break hard links
-rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
+# rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
 ln -s %{_datadir}/go/src/cmd/ld/textflag.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}
 ln -s %{_datadir}/go/src/runtime/{runtime,cgocall,funcdata}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
 
