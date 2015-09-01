@@ -245,21 +245,26 @@ strip $GOBIN/go # bnc#818502
 %endif
 
 %check
-export GOROOT=$(pwd -P)
-export PATH="$PATH":"$GOROOT"/bin
-chmod +x doc/progs/run
+chmod 755 doc/progs/run.go
 chmod +x doc/articles/wiki/test.bash
 chmod +x doc/codewalk/run
-cd src
+
+export GOROOT="$(pwd)"
+export GOBIN="${GOROOT}/bin"
+
+pushd src
 # For now test 3729,5603 doesn't pass so skiping it
 perl -pi -e 's/!windows/!windows,!linux/' ../misc/cgo/test/issue3729.go
 perl -pi -e 's/func Test3729/\/\/func Test3729/' ../misc/cgo/test/cgo_test.go
 perl -pi -e 's/^package/\/\/ +build !linux^Mpackage/' ../misc/cgo/test/issue5603.go
 perl -pi -e 's/func Test5603/\/\/func Test5603/' ../misc/cgo/test/cgo_test.go
+rm -f cmd/go/note_test.go
+rm -f cmd/go/vendor_test.go
+rm -f syscall/exec_linux_test.go
+rm -f ./cmd/go/go_test.go
 #./run.bash --no-rebuild --banner
-
-CGO_ENABLED=0 ./run.bash --no-rebuild
-cd ..
+PATH="${GOBIN}:${PATH}" CGO_ENABLED=0 ./run.bash --no-rebuild
+popd
 
 %install
 export GOROOT="%{buildroot}%{_libdir}/%{name}"
@@ -299,7 +304,7 @@ install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
 sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/rpm/macros.go
 
 # break hard links
-# rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
+#rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
 ln -s %{_datadir}/go/src/cmd/ld/textflag.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}
 ln -s %{_datadir}/go/src/runtime/{runtime,cgocall,funcdata}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
 
