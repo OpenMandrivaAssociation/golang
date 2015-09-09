@@ -217,8 +217,11 @@ cp %{SOURCE5} .
 %ifarch x86_64
 %define go_arch amd64
 %endif
-%ifarch %{armx}
+%ifarch %{arm}
 %define go_arch arm
+%endif
+%ifarch aarch64
+%define go_arch arm64
 %endif
 
 %build
