@@ -49,7 +49,7 @@ safety of a static language.
 %ifarch %{ix86}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
 %endif
-%ifarch %{armx}
+%ifarch %{arm}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
 %endif
 %{_libdir}/go/src
