@@ -8,7 +8,7 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.5
+Version:	1.5.1
 Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
