@@ -234,12 +234,6 @@ cd src
 
 export CC_FOR_TARGET="%{__cc}"
 export CC="%{__cc}"
-%if %mdvver >= 201500
-%ifarch %ix86
-export CC_FOR_TARGET="gcc"
-export CC="gcc"
-%endif
-%endif
 
 GOROOT_BOOTSTRAP=/usr ./make.bash
 
