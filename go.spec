@@ -9,7 +9,7 @@
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
 Version:	1.5.1
-Release:	1
+Release:	2
 License:	BSD-3-Clause
 Group:		Development/Other
 Url:		http://golang.org
@@ -181,6 +181,7 @@ safety of a static language.
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/*
 %{_libdir}/go/pkg/bootstrap/bin/*
 %{_libdir}/go/pkg/include/*.h
+%{_libdir}/%{name}/bin/%{name}
 %{_bindir}/go*
 %{_datadir}/go
 %config %{_sysconfdir}/rpm/macros.go
@@ -287,6 +288,9 @@ mkdir -p $GOROOT/lib
 cp -Rp pkg $GOROOT
 cp bin/* %{buildroot}%{_bindir}
 rm -f %{buildroot}%{_bindir}/{hgpatch,quietgcc}
+
+mkdir -p %{buildroot}/%{_libdir}/%{name}/bin/
+ln -s %{_bindir}/%{name} %{buildroot}/%{_libdir}/%{name}/bin/%{name}
 
 # documentation and examples
 # fix documetation permissions (rpmlint warning)
