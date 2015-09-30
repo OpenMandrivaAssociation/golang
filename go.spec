@@ -18,6 +18,9 @@ Source1:	%{name}.rpmlintrc
 Source2:	go.sh
 Source3:	macros.go
 Source5:	godoc.service
+Patch0:		golang-1.2-verbose-build.patch
+Patch2:		golang-1.2-remove-ECC-p224.patch
+Patch3:		armhf-elf-header.patch
 # PATCH-FIX-OPENSUSE re-enable build binary only packages (we are binary distro)
 # see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
 Patch4:		allow-binary-only-packages.patch
@@ -234,10 +237,7 @@ mkdir -p "$GOBIN"
 
 cd src
 
-export CC_FOR_TARGET="%{__cc}"
-export CC="%{__cc}"
-
-./make.bash --no-clean
+CFLAGS="%{optflags}" LDFLAGS="%{ldflags}" GOOS=%{_target_os} CC_FOR_TARGET="%{__cc}" CC="%{__cc}" ./make.bash --no-clean
 
 %ifarch %ix86
 strip $GOBIN/go # bnc#818502
