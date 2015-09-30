@@ -229,13 +229,15 @@ export CFLAGS="$CFLAGS -fno-strict-aliasing"
 export GOROOT="`pwd`"
 export GOROOT_FINAL=%{_libdir}/go
 export GOBIN="$GOROOT/bin"
+export GOROOT_BOOTSTRAP=%{_prefix}
 mkdir -p "$GOBIN"
+
 cd src
 
 export CC_FOR_TARGET="%{__cc}"
 export CC="%{__cc}"
 
-GOROOT_BOOTSTRAP=/usr ./make.bash
+./make.bash --no-clean
 
 %ifarch %ix86
 strip $GOBIN/go # bnc#818502
