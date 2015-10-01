@@ -25,7 +25,7 @@ Patch3:		armhf-elf-header.patch
 # see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
 Patch4:		allow-binary-only-packages.patch
 BuildRequires:	bison
-BuildRequires:	gcc-go
+BuildRequires:	go
 BuildRequires:	ed
 BuildRequires:	systemd
 BuildRequires:	diffutils
@@ -56,7 +56,9 @@ safety of a static language.
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
 %endif
 %{_libdir}/go/src
-%{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
+# %{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
+%{_libdir}/go/pkg/bootstrap/pkg/%{_os}_%{go_arch}/bootstrap/
+%{_libdir}/go/pkg/%{_os}_%{go_arch}_dynlink/*
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/tar.a
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/zip.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bufio.a
@@ -229,19 +231,44 @@ cp %{SOURCE5} .
 %endif
 
 %build
-export CFLAGS="$CFLAGS -fno-strict-aliasing"
-export GOROOT="`pwd`"
-export GOROOT_FINAL=%{_libdir}/go
-export GOBIN="$GOROOT/bin"
-export GOROOT_BOOTSTRAP=%{_prefix}
 mkdir -p "$GOBIN"
+export GOROOT="$(pwd)"
+export GOBIN="${GOROOT}/bin"
 
-cd src
+# go1.5 bootstrapping. The compiler is written in golang.
+export GOROOT_BOOTSTRAP=%{_libdir}/%{name}
 
-CFLAGS="%{optflags}" LDFLAGS="%{ldflags}" GOOS=%{_target_os} CC_FOR_TARGET="%{__cc}" CC="%{__cc}" ./make.bash --no-clean
+# set up final install location
+export GOROOT_FINAL=%{_libdir}/%{name}
+
+# TODO use the system linker to get the system link flags and build-id
+# when https://code.google.com/p/go/issues/detail?id=5221 is solved
+#export GO_LDFLAGS="-linkmode external -extldflags $RPM_LD_FLAGS"
+
+export GOHOSTOS=linux
+export GOHOSTARCH=%{go_arch}
+
+
+pushd src
+# use our gcc options for this build, but store gcc as default for compiler
+CFLAGS="%{optflags}" \
+LDFLAGS="%{ldflags}" \
+CC="%{__cc}" \
+CC_FOR_TARGET="%{__cc}" \
+CXX_FOR_TARGET="%{__cxx}" \
+GOOS=%{_os} \
+GOARCH=%{go_arch} \
+        ./make.bash --no-clean
+popd
 
 %ifarch %ix86
 strip $GOBIN/go # bnc#818502
+%endif
+
+%ifarch x86_64
+# TODO get linux/386 support for shared objects.
+# golang shared objects for stdlib
+GOROOT=$(pwd) PATH=$(pwd)/bin:$PATH go install -buildmode=shared std
 %endif
 
 %check
@@ -310,4 +337,3 @@ sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/rpm/macros.go
 #rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
 ln -s %{_datadir}/go/src/cmd/ld/textflag.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}
 ln -s %{_datadir}/go/src/runtime/{runtime,cgocall,funcdata}.h %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/
-
