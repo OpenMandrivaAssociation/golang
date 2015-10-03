@@ -58,7 +58,9 @@ safety of a static language.
 %{_libdir}/go/src
 # %{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
 %{_libdir}/go/pkg/bootstrap/pkg/%{_os}_%{go_arch}/bootstrap/
+%ifarch x86_64
 %{_libdir}/go/pkg/%{_os}_%{go_arch}_dynlink/*
+%endif
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/tar.a
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/zip.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bufio.a
@@ -231,9 +233,9 @@ cp %{SOURCE5} .
 %endif
 
 %build
-mkdir -p "$GOBIN"
 export GOROOT="$(pwd)"
 export GOBIN="${GOROOT}/bin"
+mkdir -p "$GOBIN"
 
 # go1.5 bootstrapping. The compiler is written in golang.
 export GOROOT_BOOTSTRAP=%{_libdir}/%{name}
