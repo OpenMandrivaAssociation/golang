@@ -256,6 +256,9 @@ LDFLAGS="%{ldflags}" \
 CC="%{__cc}" \
 CC_FOR_TARGET="%{__cc}" \
 CXX_FOR_TARGET="%{__cxx}" \
+%ifarch %arm
+GOARM=7 \
+%endif
 GOOS=%{_os} \
 GOARCH=%{go_arch} \
         ./make.bash --no-clean
