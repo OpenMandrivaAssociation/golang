@@ -257,7 +257,11 @@ pushd src
 CFLAGS="%{optflags}" \
 LDFLAGS="%{ldflags}" \
 CC="%{__cc}" \
+%ifarch %{arm}
+CC_FOR_TARGET="gcc" \
+%else
 CC_FOR_TARGET="%{__cc}" \
+%endif
 CXX_FOR_TARGET="%{__cxx}" \
 %ifarch %arm
 GOARM=7 \
