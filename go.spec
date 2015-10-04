@@ -1,5 +1,6 @@
 %define debug_package %{nil}
 %define __debug_install_post echo
+%define _disable_lto 1
 
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
