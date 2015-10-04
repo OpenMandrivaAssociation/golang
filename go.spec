@@ -53,9 +53,6 @@ safety of a static language.
 %ifarch %{ix86}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
 %endif
-%ifarch %{arm}
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/5*
-%endif
 %{_libdir}/go/src
 # %{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
 %{_libdir}/go/pkg/bootstrap/pkg/%{_os}_%{go_arch}/bootstrap/
