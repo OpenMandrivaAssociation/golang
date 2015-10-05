@@ -264,7 +264,7 @@ pushd src
 CFLAGS="%{optflags}" \
 LDFLAGS="%{ldflags}" \
 CC="%{__cc}" \
-%ifarch %{arm}
+%ifarch %{arm} %{ix86}
 CC_FOR_TARGET="gcc" \
 %else
 CC_FOR_TARGET="%{__cc}" \
