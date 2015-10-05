@@ -1,6 +1,7 @@
 %define debug_package %{nil}
 %define __debug_install_post echo
 %define _disable_lto 1
+%bcond_without bootstrap
 
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
@@ -26,7 +27,12 @@ Patch3:		armhf-elf-header.patch
 # see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
 Patch4:		allow-binary-only-packages.patch
 BuildRequires:	bison
+%if %{with bootstrap}
+BuildRequires:	gcc-go
+%endif
+%if !%{with bootstrap}
 BuildRequires:	go
+%endif
 BuildRequires:	ed
 BuildRequires:	systemd
 BuildRequires:	diffutils
@@ -229,9 +235,6 @@ cp %{SOURCE5} .
 %ifarch aarch64
 %define go_arch arm64
 %endif
-# oj jeez what i'm doing?
-# remove me
-sudo cp -f %{_bindir}/%{name} %{_libdir}/%{name}/
 
 %build
 export GOROOT="$(pwd)"
@@ -239,7 +242,11 @@ export GOBIN="${GOROOT}/bin"
 mkdir -p "$GOBIN"
 
 # go1.5 bootstrapping. The compiler is written in golang.
+%if !%{with bootstrap}
 export GOROOT_BOOTSTRAP=%{_libdir}/%{name}
+%else
+export GOROOT_BOOTSTRAP=%{_prefix}
+%endif
 
 # set up final install location
 export GOROOT_FINAL=%{_libdir}/%{name}
