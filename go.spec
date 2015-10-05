@@ -63,7 +63,9 @@ safety of a static language.
 %if %{with bootstrap}
 %{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
 %endif
+%if !%{with bootstrap}
 %{_libdir}/go/pkg/bootstrap/pkg/%{_os}_%{go_arch}/bootstrap/
+%endif
 %ifarch x86_64
 %{_libdir}/go/pkg/%{_os}_%{go_arch}_dynlink/*
 %endif
