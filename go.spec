@@ -229,6 +229,9 @@ cp %{SOURCE5} .
 %ifarch aarch64
 %define go_arch arm64
 %endif
+# oj jeez what i'm doing?
+# remove me
+sudo cp -f %{_bindir}/%{name} %{_libdir}/%{name}/
 
 %build
 export GOROOT="$(pwd)"
