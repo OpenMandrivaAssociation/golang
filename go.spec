@@ -338,9 +338,9 @@ rm -rf misc/cgo/test/{_*,*.o,*.out,*.6,*.8}
 
 # install RPM macros
 install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
-sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/rpm/macros.go
-sed -i s/GOARCH/%{go_arch}/ %{buildroot}%{_sysconfdir}/profile.d/go.sh
-sed -i s/LIBDIR/%{_libdir}/ %{buildroot}%{_sysconfdir}/profile.d/go.sh
+sed -i s!GOARCH!%{go_arch}! %{buildroot}%{_sysconfdir}/rpm/macros.go
+sed -i s!GOARCH!%{go_arch}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
+sed -i s!LIBDIR!%{_libdir}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
 
 # break hard links
 #rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
