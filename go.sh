@@ -1,10 +1,6 @@
 # go toolchain env paths
-gopath=lib
-arch=386
-if [ -x /usr/lib64/go ] ; then
-  gopath=lib64
-  arch=amd64
-fi  
+gopath=LIBDIR
+arch=GOARCH
 
 export GOOS="linux"
 export GOARCH=$arch
