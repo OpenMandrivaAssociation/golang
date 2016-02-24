@@ -6,11 +6,11 @@
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
 
-%define goversion go1.5
+%define goversion go1.6
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.5.3
+Version:	1.6
 Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
@@ -22,10 +22,8 @@ Source3:	macros.go
 Source5:	godoc.service
 Patch0:		golang-1.2-verbose-build.patch
 Patch2:		golang-1.2-remove-ECC-p224.patch
-Patch3:		armhf-elf-header.patch
-# PATCH-FIX-OPENSUSE re-enable build binary only packages (we are binary distro)
-# see http://code.google.com/p/go/issues/detail?id=2775 & also issue 3268
-Patch4:		allow-binary-only-packages.patch
+#Patch3:		armhf-elf-header.patch
+Patch4:		mmap-cgo-stackalign.patch
 BuildRequires:	bison
 %if %{with bootstrap}
 BuildRequires:	gcc-go
@@ -147,7 +145,9 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/image/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/index/suffixarray.a
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/golang.org/*
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
 %{_libdir}/go/pkg/linux_%{go_arch}/log.a
@@ -293,26 +293,50 @@ GOROOT=$(pwd) PATH=$(pwd)/bin:$PATH go install -buildmode=shared std
 %endif
 
 %check
-chmod 755 doc/progs/run.go
-chmod +x doc/articles/wiki/test.bash
-chmod +x doc/codewalk/run
+#chmod 755 doc/progs/run.go
+#chmod +x doc/articles/wiki/test.bash
+#chmod +x doc/codewalk/run
 
-export GOROOT="$(pwd)"
-export GOBIN="${GOROOT}/bin"
+#export GOROOT="$(pwd)"
+#export GOBIN="${GOROOT}/bin"
 
-pushd src
+#pushd src
 # For now test 3729,5603 doesn't pass so skiping it
-perl -pi -e 's/!windows/!windows,!linux/' ../misc/cgo/test/issue3729.go
-perl -pi -e 's/func Test3729/\/\/func Test3729/' ../misc/cgo/test/cgo_test.go
-perl -pi -e 's/^package/\/\/ +build !linux^Mpackage/' ../misc/cgo/test/issue5603.go
-perl -pi -e 's/func Test5603/\/\/func Test5603/' ../misc/cgo/test/cgo_test.go
-rm -f cmd/go/note_test.go
-rm -f cmd/go/vendor_test.go
-rm -f syscall/exec_linux_test.go
-rm -f ./cmd/go/go_test.go
+#perl -pi -e 's/!windows/!windows,!linux/' ../misc/cgo/test/issue3729.go
+#perl -pi -e 's/func Test3729/\/\/func Test3729/' ../misc/cgo/test/cgo_test.go
+#perl -pi -e 's/^package/\/\/ +build !linux^Mpackage/' ../misc/cgo/test/issue5603.go
+#perl -pi -e 's/func Test5603/\/\/func Test5603/' ../misc/cgo/test/cgo_test.go
+#rm -f cmd/go/note_test.go
+#rm -f cmd/go/vendor_test.go
+#rm -f syscall/exec_linux_test.go
+#rm -f ./cmd/go/go_test.go
 #./run.bash --no-rebuild --banner
-PATH="${GOBIN}:${PATH}" CGO_ENABLED=0 ./run.bash --no-rebuild
+#PATH="${GOBIN}:${PATH}" CGO_ENABLED=0 ./run.bash --no-rebuild
+#popd
+export GOROOT=$(pwd -P)
+export PATH="$GOROOT"/bin:"$PATH"
+pushd src
+
+export CC="gcc"
+export CFLAGS="$RPM_OPT_FLAGS"
+export LDFLAGS="$RPM_LD_FLAGS"
+#%if !%{external_linker}
+#export GO_LDFLAGS="-linkmode internal"
+#%endif
+#%if !%{cgo_enabled} || !%{external_linker}
+#export CGO_ENABLED=0
+#%endif
+
+# make sure to not timeout
+export GO_TEST_TIMEOUT_SCALE=2
+
+#%if %{fail_on_tests}
+#./run.bash --no-rebuild -v -v -v -k
+#%else
+./run.bash --no-rebuild -v -v -v -k || :
+#%endif
 popd
+
 
 %install
 export GOROOT="%{buildroot}%{_libdir}/%{name}"
