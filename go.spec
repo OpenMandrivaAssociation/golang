@@ -10,7 +10,7 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.6
+Version:	1.6.1
 Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
@@ -147,6 +147,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows/sysdll.a
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/golang.org/*
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
