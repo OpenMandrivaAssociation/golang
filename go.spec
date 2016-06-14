@@ -10,7 +10,7 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.6.1
+Version:	1.6.2
 Release:	1
 License:	BSD-3-Clause
 Group:		Development/Other
@@ -22,8 +22,6 @@ Source3:	macros.go
 Source5:	godoc.service
 Patch0:		golang-1.2-verbose-build.patch
 Patch2:		golang-1.2-remove-ECC-p224.patch
-#Patch3:		armhf-elf-header.patch
-Patch4:		mmap-cgo-stackalign.patch
 BuildRequires:	bison
 %if %{with bootstrap}
 BuildRequires:	gcc-go
