@@ -6,11 +6,11 @@
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
 
-%define goversion go1.6
+%define goversion go1.7
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.5.4
+Version:	1.7
 Release:	1
 Epoch:		1
 License:	BSD-3-Clause
@@ -22,7 +22,6 @@ Source2:	go.sh
 Source3:	macros.go
 Source5:	godoc.service
 Patch0:		golang-1.2-verbose-build.patch
-Patch2:		golang-1.2-remove-ECC-p224.patch
 BuildRequires:	bison
 %if %{with bootstrap}
 BuildRequires:	gcc-go
@@ -53,34 +52,42 @@ safety of a static language.
 
 %files
 %doc AUTHORS CONTRIBUTORS LICENSE PATENTS
-%ifarch %{ix86}
-%{_libdir}/go/pkg/tool/linux_%{go_arch}/8*
-%endif
+%dir %{_libdir}/go
 %{_libdir}/go/src
+%dir %{_libdir}/go/pkg
 %if %{with bootstrap}
+%dir %{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}
 %{_libdir}/go/pkg/bootstrap/pkg/gccgo_linux_%{go_arch}/bootstrap/
-%endif
-%if !%{with bootstrap}
+%else
+%dir %{_libdir}/go/pkg/bootstrap/pkg/%{_os}_%{go_arch}
 %{_libdir}/go/pkg/bootstrap/pkg/%{_os}_%{go_arch}/bootstrap/
 %endif
 %ifarch x86_64
+%dir %{_libdir}/go/pkg/%{_os}_%{go_arch}_dynlink
 %{_libdir}/go/pkg/%{_os}_%{go_arch}_dynlink/*
 %endif
+%dir %{_libdir}/go/pkg/linux_%{go_arch}
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/archive
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/tar.a
 %{_libdir}/go/pkg/linux_%{go_arch}/archive/zip.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bufio.a
 %{_libdir}/go/pkg/linux_%{go_arch}/bytes.a
 %{_libdir}/go/pkg/linux_%{go_arch}/cgocall.h
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/cmd
 %{_libdir}/go/pkg/linux_%{go_arch}/cmd/*
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/compress
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/bzip2.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/flate.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/gzip.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/lzw.a
 %{_libdir}/go/pkg/linux_%{go_arch}/compress/zlib.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/container
 %{_libdir}/go/pkg/linux_%{go_arch}/container/heap.a
 %{_libdir}/go/pkg/linux_%{go_arch}/container/list.a
 %{_libdir}/go/pkg/linux_%{go_arch}/container/ring.a
+%{_libdir}/go/pkg/linux_%{go_arch}/context.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/aes.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/cipher.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/des.a
@@ -98,9 +105,13 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/subtle.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/tls.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/x509.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto/x509
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/x509/pkix.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/database
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/database/sql
 %{_libdir}/go/pkg/linux_%{go_arch}/database/sql.a
 %{_libdir}/go/pkg/linux_%{go_arch}/database/sql/driver.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/debug
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/dwarf.a
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/elf.a
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/gosym.a
@@ -108,6 +119,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/plan9obj.a
 %{_libdir}/go/pkg/linux_%{go_arch}/debug/pe.a
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/encoding
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding/ascii85.a
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding/asn1.a
 %{_libdir}/go/pkg/linux_%{go_arch}/encoding/base32.a
@@ -125,74 +137,116 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/flag.a
 %{_libdir}/go/pkg/linux_%{go_arch}/fmt.a
 %{_libdir}/go/pkg/linux_%{go_arch}/funcdata.h
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/go
 %{_libdir}/go/pkg/linux_%{go_arch}/go/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/go/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/go/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/hash
 %{_libdir}/go/pkg/linux_%{go_arch}/hash/adler32.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash/crc32.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash/crc64.a
 %{_libdir}/go/pkg/linux_%{go_arch}/hash/fnv.a
 %{_libdir}/go/pkg/linux_%{go_arch}/html.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/html
 %{_libdir}/go/pkg/linux_%{go_arch}/html/template.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/image
 %{_libdir}/go/pkg/linux_%{go_arch}/image/color.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/image/color
 %{_libdir}/go/pkg/linux_%{go_arch}/image/color/palette.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/draw.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/gif.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/jpeg.a
 %{_libdir}/go/pkg/linux_%{go_arch}/image/png.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/image/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/image/internal/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/index
 %{_libdir}/go/pkg/linux_%{go_arch}/index/suffixarray.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/*.a
-#%{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows/sysdll.a
-#%{_libdir}/go/pkg/linux_%{go_arch}/internal/golang.org/*
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/io
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
 %{_libdir}/go/pkg/linux_%{go_arch}/log.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/log
 %{_libdir}/go/pkg/linux_%{go_arch}/log/syslog.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/math
 %{_libdir}/go/pkg/linux_%{go_arch}/math/big.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/cmplx.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/rand.a
 %{_libdir}/go/pkg/linux_%{go_arch}/mime.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/net
 %{_libdir}/go/pkg/linux_%{go_arch}/net/*
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/mime
 %{_libdir}/go/pkg/linux_%{go_arch}/mime/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/os
 %{_libdir}/go/pkg/linux_%{go_arch}/os/exec.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os/signal.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os/user.a
 %{_libdir}/go/pkg/linux_%{go_arch}/path.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/path
 %{_libdir}/go/pkg/linux_%{go_arch}/path/filepath.a
 %{_libdir}/go/pkg/linux_%{go_arch}/reflect.a
 %{_libdir}/go/pkg/linux_%{go_arch}/regexp.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/regexp
 %{_libdir}/go/pkg/linux_%{go_arch}/regexp/syntax.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime.h
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/sort.a
 %{_libdir}/go/pkg/linux_%{go_arch}/strconv.a
 %{_libdir}/go/pkg/linux_%{go_arch}/strings.a
 %{_libdir}/go/pkg/linux_%{go_arch}/sync.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/sync
 %{_libdir}/go/pkg/linux_%{go_arch}/sync/atomic.a
 %{_libdir}/go/pkg/linux_%{go_arch}/syscall.a
 %{_libdir}/go/pkg/linux_%{go_arch}/testing.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/testing
 %{_libdir}/go/pkg/linux_%{go_arch}/testing/iotest.a
 %{_libdir}/go/pkg/linux_%{go_arch}/testing/quick.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/text
 %{_libdir}/go/pkg/linux_%{go_arch}/text/scanner.a
 %{_libdir}/go/pkg/linux_%{go_arch}/text/tabwriter.a
 %{_libdir}/go/pkg/linux_%{go_arch}/text/template.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/text/template
 %{_libdir}/go/pkg/linux_%{go_arch}/text/template/parse.a
 %{_libdir}/go/pkg/linux_%{go_arch}/textflag.h
 %{_libdir}/go/pkg/linux_%{go_arch}/time.a
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/unicode
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode/utf16.a
 %{_libdir}/go/pkg/linux_%{go_arch}/unicode/utf8.a
-%{_libdir}/go/pkg/bootstrap/src/bootstrap/*
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2/hpack.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex/httplex.a
+%dir %{_libdir}/go/pkg/tool
+%dir %{_libdir}/go/pkg/tool/linux_%{go_arch}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/*
+%dir %{_libdir}/go/pkg/bootstrap
+%dir %{_libdir}/go/pkg/bootstrap/bin
+%dir %{_libdir}/go/pkg/bootstrap/pkg
+%dir %{_libdir}/go/pkg/bootstrap/src
+%dir %{_libdir}/go/pkg/bootstrap/src/bootstrap
+%{_libdir}/go/pkg/bootstrap/src/bootstrap/*
 %{_libdir}/go/pkg/bootstrap/bin/*
+%dir %{_libdir}/go/pkg/include
 %{_libdir}/go/pkg/include/*.h
+%dir %{_libdir}/%{name}/bin
 %{_libdir}/%{name}/bin/%{name}
 %{_bindir}/go*
 %{_datadir}/go
