@@ -1,7 +1,7 @@
 %define debug_package %{nil}
 %define __debug_install_post echo
 %define _disable_lto 1
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
@@ -25,8 +25,7 @@ Patch0:		golang-1.2-verbose-build.patch
 BuildRequires:	bison
 %if %{with bootstrap}
 BuildRequires:	gcc-go
-%endif
-%if !%{with bootstrap}
+%else
 BuildRequires:	go
 %endif
 BuildRequires:	ed
