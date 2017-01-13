@@ -3,19 +3,20 @@
 # Copyrigh: (c) 2011 Sascha Peilicke <saschpe@gmx.de>
 #
 
-%go_ver         %(LC_ALL=C rpm -q --qf '%%{epoch}:%%{version}\\n' go | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
-%go_arch        GOARCH
-%go_build_ver   %(go version | sed 's/^go version //' | tr -d ' ')
+%go_ver		%(LC_ALL=C rpm -q --qf '%%{epoch}:%%{version}\\n' go | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%go_arch	GOARCH
+%go_build_ver	%(go version | sed 's/^go version //' | tr -d ' ')
 
-%go_dir         %{_libdir}/go
-%go_sitedir     %{_libdir}/go/pkg
-%go_sitearch    %{_libdir}/go/pkg/linux_%{go_arch}
+%go_dir		%{_libdir}/go
+%gopath		%{go_dir}
+%go_sitedir	%{_libdir}/go/pkg
+%go_sitearch	%{_libdir}/go/pkg/linux_%{go_arch}
 
-%go_requires    Requires: go-devel = %go_build_ver
+%go_requires	Requires: go-devel = %go_build_ver
 
 %go_provides \
-Provides:       %{name}-devel = %{version} \
-Provides:       %{name}-devel-static = %{version}
+Provides:	%{name}-devel = %{version} \
+Provides:	%{name}-devel-static = %{version}
 
 %go_disable_brp_strip_static_archive \
 %define __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/usr/lib/rpm/[^/]*/?brp-strip-static-archive %{__strip}!!g')
@@ -148,4 +149,3 @@ install -d %{buildroot}%{_datadir}/go/src/pkg \
 cd %{_builddir}/go/src \
 find . -name *.go -exec install -Dm644 \{\} %{buildroot}%{_datadir}/go/src/pkg/\{\} \\; \
 %{nil}
-
