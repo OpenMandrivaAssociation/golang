@@ -10,8 +10,8 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.7.4
-Release:	2
+Version:	1.7.5
+Release:	1
 Epoch:		1
 License:	BSD-3-Clause
 Group:		Development/Other
@@ -429,9 +429,9 @@ rm -rf misc/cgo/test/{_*,*.o,*.out,*.6,*.8}
 
 # install RPM macros
 install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
-sed -i s!GOARCH!%{go_arch}! %{buildroot}%{_sysconfdir}/rpm/macros.go
-sed -i s!GOARCH!%{go_arch}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
-sed -i s!LIBDIR!%{_lib}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
+sed -i s!@GOARCH@!%{go_arch}! %{buildroot}%{_sysconfdir}/rpm/macros.go
+sed -i s!@GOARCH@!%{go_arch}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
+sed -i s!@LIBDIR@!%{_lib}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
 
 # break hard links
 #rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
