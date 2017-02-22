@@ -6,11 +6,11 @@
 # eol 'fix' corrupts some .a files makes 6l give 'out of memory'
 %define dont_fix_eol 1
 
-%define goversion go1.7
+%define goversion go%(echo %{version} |cut -d. -f1-2)
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.7.5
+Version:	1.8
 Release:	1
 Epoch:		1
 License:	BSD-3-Clause
@@ -89,6 +89,8 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/aes.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/cipher.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/crypto/internal/cipherhw.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/des.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/dsa.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/ecdsa.a
@@ -164,10 +166,12 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/index/suffixarray.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/pprof
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/pprof/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows
-%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows/sysdll.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/io
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
@@ -192,6 +196,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/path.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/path
 %{_libdir}/go/pkg/linux_%{go_arch}/path/filepath.a
+%{_libdir}/go/pkg/linux_%{go_arch}/plugin.a
 %{_libdir}/go/pkg/linux_%{go_arch}/reflect.a
 %{_libdir}/go/pkg/linux_%{go_arch}/regexp.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/regexp
@@ -202,6 +207,9 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal/*.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof/internal/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/sort.a
 %{_libdir}/go/pkg/linux_%{go_arch}/strconv.a
 %{_libdir}/go/pkg/linux_%{go_arch}/strings.a
@@ -213,6 +221,8 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/testing
 %{_libdir}/go/pkg/linux_%{go_arch}/testing/iotest.a
 %{_libdir}/go/pkg/linux_%{go_arch}/testing/quick.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/testing/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/testing/internal/testdeps.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/text
 %{_libdir}/go/pkg/linux_%{go_arch}/text/scanner.a
 %{_libdir}/go/pkg/linux_%{go_arch}/text/tabwriter.a
@@ -228,11 +238,24 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal/chacha20.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/curve25519.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/poly1305.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2/hpack.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/idna.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex/httplex.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/transform.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode/norm.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/width.a
 %dir %{_libdir}/go/pkg/tool
 %dir %{_libdir}/go/pkg/tool/linux_%{go_arch}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/*
