@@ -10,7 +10,7 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.8.5
+Version:	1.9.3
 Release:	1
 Epoch:		1
 License:	BSD-3-Clause
@@ -166,8 +166,6 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/index/suffixarray.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/*.a
-%dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/pprof
-%{_libdir}/go/pkg/linux_%{go_arch}/internal/pprof/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows
@@ -181,6 +179,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/math.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/math
 %{_libdir}/go/pkg/linux_%{go_arch}/math/big.a
+%{_libdir}/go/pkg/linux_%{go_arch}/math/bits.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/cmplx.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/rand.a
 %{_libdir}/go/pkg/linux_%{go_arch}/mime.a
@@ -249,13 +248,19 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2/hpack.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/idna.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/nettest.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/proxy.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex/httplex.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure/bidirule.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/transform.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode/bidi.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode/norm.a
-%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/width.a
 %dir %{_libdir}/go/pkg/tool
 %dir %{_libdir}/go/pkg/tool/linux_%{go_arch}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/*
