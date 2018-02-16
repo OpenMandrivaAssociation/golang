@@ -10,8 +10,8 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.7.4
-Release:	2
+Version:	1.9.3
+Release:	1
 Epoch:		1
 License:	BSD-3-Clause
 Group:		Development/Other
@@ -21,7 +21,7 @@ Source1:	%{name}.rpmlintrc
 Source2:	go.sh
 Source3:	macros.go
 Source5:	godoc.service
-Patch0:		golang-1.2-verbose-build.patch
+#Patch0:		golang-1.2-verbose-build.patch
 BuildRequires:	bison
 %if %{with bootstrap}
 BuildRequires:	gcc-go
@@ -88,23 +88,9 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/context.a
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/aes.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/cipher.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/des.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/dsa.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/ecdsa.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/elliptic.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/hmac.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/md5.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/rand.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/rc4.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/rsa.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/sha1.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/sha256.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/sha512.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/subtle.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/tls.a
-%{_libdir}/go/pkg/linux_%{go_arch}/crypto/x509.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/crypto/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/crypto/internal/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/crypto/x509
 %{_libdir}/go/pkg/linux_%{go_arch}/crypto/x509/pkix.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/database
@@ -168,7 +154,7 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall
 %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows
-%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows/sysdll.a
+%{_libdir}/go/pkg/linux_%{go_arch}/internal/syscall/windows/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/io.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/io
 %{_libdir}/go/pkg/linux_%{go_arch}/io/ioutil.a
@@ -178,9 +164,11 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/math.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/math
 %{_libdir}/go/pkg/linux_%{go_arch}/math/big.a
+%{_libdir}/go/pkg/linux_%{go_arch}/math/bits.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/cmplx.a
 %{_libdir}/go/pkg/linux_%{go_arch}/math/rand.a
 %{_libdir}/go/pkg/linux_%{go_arch}/mime.a
+%{_libdir}/go/pkg/linux_%{go_arch}/plugin.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/net
 %{_libdir}/go/pkg/linux_%{go_arch}/net/*
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/mime
@@ -200,6 +188,9 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime.h
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/runtime/pprof/internal/profile.a
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/runtime/internal/*.a
@@ -212,8 +203,9 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/syscall.a
 %{_libdir}/go/pkg/linux_%{go_arch}/testing.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/testing
-%{_libdir}/go/pkg/linux_%{go_arch}/testing/iotest.a
-%{_libdir}/go/pkg/linux_%{go_arch}/testing/quick.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/testing/internal
+%{_libdir}/go/pkg/linux_%{go_arch}/testing/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/testing/internal/*.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/text
 %{_libdir}/go/pkg/linux_%{go_arch}/text/scanner.a
 %{_libdir}/go/pkg/linux_%{go_arch}/text/tabwriter.a
@@ -230,10 +222,22 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal/
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2/hpack.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex/httplex.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/*.a
 %dir %{_libdir}/go/pkg/tool
 %dir %{_libdir}/go/pkg/tool/linux_%{go_arch}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/*
@@ -387,7 +391,7 @@ export GO_TEST_TIMEOUT_SCALE=2
 #%if %{fail_on_tests}
 #./run.bash --no-rebuild -v -v -v -k
 #%else
-./run.bash --no-rebuild -v -v -v -k || :
+#./run.bash --no-rebuild -v -v -v -k || :
 #%endif
 popd
 

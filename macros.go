@@ -11,6 +11,7 @@
 %gopath		%{go_dir}
 %go_sitedir	%{_libdir}/go/pkg
 %go_sitearch	%{_libdir}/go/pkg/linux_%{go_arch}
+%go_arches	%{ix86} x86_64 %{armx}
 
 %go_requires	Requires: go-devel = %go_build_ver
 
