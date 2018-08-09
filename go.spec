@@ -10,7 +10,7 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.9.6
+Version:	1.10.3
 Release:	1
 Epoch:		1
 License:	BSD-3-Clause
@@ -19,9 +19,8 @@ Url:		http://golang.org
 Source0:	https://storage.googleapis.com/golang/%{name}%{version}.src.tar.gz
 Source1:	%{name}.rpmlintrc
 Source2:	go.sh
-Source3:	macros.go
+BuildRequires:	go-srpm-macros
 Source5:	godoc.service
-Patch0:		golang-1.2-verbose-build.patch
 BuildRequires:	bison
 %if %{with bootstrap}
 BuildRequires:	gcc-go
@@ -41,6 +40,7 @@ Provides:	go-devel-static = %{goversion}
 Provides:	golang = %{version}-%{release}
 Obsoletes:	go-devel < %{goversion}
 Obsoletes:	%{name}-kate < 1.2.1
+Requires:	go-srpm-macros
 
 %description
 Go is an expressive, concurrent, garbage collected systems programming language
@@ -277,8 +277,6 @@ safety of a static language.
 %{_libdir}/%{name}/bin/%{name}
 %{_bindir}/go*
 %{_datadir}/go
-%config %{_sysconfdir}/rpm/macros.go
-%config %{_sysconfdir}/profile.d/go.sh
 %{_unitdir}/godoc.service
 
 %post
@@ -342,7 +340,6 @@ export GOROOT_FINAL=%{_libdir}/%{name}
 
 export GOHOSTOS=linux
 export GOHOSTARCH=%{go_arch}
-
 
 pushd src
 # use our gcc options for this build, but store gcc as default for compiler
@@ -421,7 +418,6 @@ popd
 
 %install
 export GOROOT="%{buildroot}%{_libdir}/%{name}"
-install -Dm644 %{SOURCE2} %{buildroot}%{_sysconfdir}/profile.d/go.sh
 
 # godoc service
 mkdir -p %{buildroot}%{_unitdir}
@@ -454,12 +450,6 @@ rm -f misc/dashboard/builder/{gobuilder,*6,*.8}
 rm -f misc/goplay/{goplay,*.6,*.8}
 rm -rf misc/windows
 rm -rf misc/cgo/test/{_*,*.o,*.out,*.6,*.8}
-
-# install RPM macros
-install -Dm644 %{SOURCE3} %{buildroot}%{_sysconfdir}/rpm/macros.go
-sed -i s!@GOARCH@!%{go_arch}! %{buildroot}%{_sysconfdir}/rpm/macros.go
-sed -i s!@GOARCH@!%{go_arch}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
-sed -i s!@LIBDIR@!%{_lib}! %{buildroot}%{_sysconfdir}/profile.d/go.sh
 
 # break hard links
 #rm %{buildroot}%{_libdir}/go/pkg/linux_%{go_arch}/{textflag,funcdata,cgocall,runtime}.h
