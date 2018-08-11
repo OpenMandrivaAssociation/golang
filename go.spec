@@ -245,6 +245,10 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal/chacha20.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/curve25519.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/poly1305.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/cryptobyte.a
+%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/cryptobyte
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/cryptobyte/asn1.a
+%{_libdir}/go/pkg/linux_amd64/vendor/golang_org/x/net/internal/nettest.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2/hpack.a
