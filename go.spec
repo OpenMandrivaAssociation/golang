@@ -19,7 +19,7 @@ Url:		http://golang.org
 Source0:	https://storage.googleapis.com/golang/%{name}%{version}.src.tar.gz
 Source1:	%{name}.rpmlintrc
 BuildRequires:	go-srpm-macros
-BuildRequires:	go-compilers
+BuildRequires:	compiler(golang)
 Source5:	godoc.service
 BuildRequires:	bison
 %if %{with bootstrap}
@@ -41,7 +41,7 @@ Provides:	golang = %{version}-%{release}
 Obsoletes:	go-devel < %{goversion}
 Obsoletes:	%{name}-kate < 1.2.1
 Requires:	go-srpm-macros
-Requires:	go-compilers
+Requires:	compiler(golang)
 
 %description
 Go is an expressive, concurrent, garbage collected systems programming language
