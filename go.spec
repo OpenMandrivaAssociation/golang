@@ -18,7 +18,6 @@ Group:		Development/Other
 Url:		http://golang.org
 Source0:	https://storage.googleapis.com/golang/%{name}%{version}.src.tar.gz
 Source1:	%{name}.rpmlintrc
-Source2:	go.sh
 BuildRequires:	go-srpm-macros
 BuildRequires:	go-compilers
 Source5:	godoc.service
