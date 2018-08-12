@@ -119,7 +119,8 @@ Source1:        fedora.go
 %if !%{golang_bootstrap}
 BuildRequires:  gcc-go >= 5
 %else
-BuildRequires:  golang > 1.4
+#BuildRequires:  golang > 1.4
+BuildRequires:  go
 %endif
 %if 0%{?rhel} > 6 || 0%{?fedora} > 0
 BuildRequires:  hostname
