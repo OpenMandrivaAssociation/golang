@@ -1,4 +1,4 @@
-%bcond_withput bootstrap
+%bcond_without bootstrap
 # temporalily ignore test failures
 %ifarch %{ix86} aarch64
 %bcond_without ignore_tests
