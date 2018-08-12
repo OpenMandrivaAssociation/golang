@@ -79,7 +79,7 @@
 # Fedora GOROOT
 %global goroot          /usr/lib/%{name}
 
-%ifarch x86_64
+%ifarch %{x86_64}
 %global gohostarch  amd64
 %endif
 %ifarch %{ix86}
