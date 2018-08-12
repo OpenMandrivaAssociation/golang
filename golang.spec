@@ -345,7 +345,7 @@ export GO_LDFLAGS="-linkmode internal"
 %if !%{cgo_enabled}
 export CGO_ENABLED=0
 %endif
-./make.bash --no-clean -v
+GOARCH=%{gohostarch} GOOS=%{_os} ./make.bash --no-clean -v
 popd
 
 # build shared std lib
