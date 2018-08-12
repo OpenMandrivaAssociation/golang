@@ -129,6 +129,7 @@ BuildRequires:  net-tools
 %endif
 # for tests
 BuildRequires:  pcre-devel, glibc-static-devel, perl-interpreter, procps-ng
+BuildRequires:  go-srpm-macros
 
 Provides:       go = %{version}-%{release}
 
