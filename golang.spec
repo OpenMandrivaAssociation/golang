@@ -42,7 +42,7 @@
 %endif
 
 # Build golang with cgo enabled/disabled(later equals more or less to internal linking).
-%ifarch %{ix86} x86_64 ppc64le %{arm} aarch64 s390x
+%ifarch %{ix86} %{x86_64} ppc64le %{arm} aarch64 s390x
 %global cgo_enabled 1
 %else
 %global cgo_enabled 0
@@ -313,11 +313,6 @@ Requires:       %{name} = %{version}-%{release}
 cp %{SOURCE1} ./src/runtime/
 
 %build
-# print out system information
-uname -a
-cat /proc/cpuinfo
-cat /proc/meminfo
-
 # bootstrap compiler GOROOT
 %if !%{golang_bootstrap}
 export GOROOT_BOOTSTRAP=/
@@ -335,8 +330,8 @@ pushd src
 # use our gcc options for this build, but store gcc as default for compiler
 export CFLAGS="$RPM_OPT_FLAGS"
 export LDFLAGS="$RPM_LD_FLAGS"
-export CC="gcc"
-export CC_FOR_TARGET="gcc"
+export CC="%{__cc}"
+export CC_FOR_TARGET="%{__cc}"
 export GOOS=linux
 export GOARCH=%{gohostarch}
 %if !%{external_linker}
