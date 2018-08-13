@@ -130,6 +130,7 @@ BuildRequires:  net-tools
 # for tests
 BuildRequires:  pcre-devel, glibc-static-devel, perl-interpreter, procps-ng
 BuildRequires:  go-srpm-macros
+BuildRequires:  timezone
 
 Provides:       go = %{version}-%{release}
 
