@@ -51,6 +51,8 @@
 # Use golang/gcc-go as bootstrap compiler
 %if %{with bootstrap}
 %global golang_bootstrap 0
+%global __cc /usr/bin/gcc
+%global __cxx /usr/bin/g++
 %else
 %global golang_bootstrap 1
 %endif
