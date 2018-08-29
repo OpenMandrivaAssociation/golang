@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 # temporalily ignore test failures
 %ifarch %{ix86} aarch64
 %bcond_without ignore_tests
@@ -108,7 +108,7 @@
 
 Name:           golang
 Version:        1.10.4
-Release:        1
+Release:        2
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
