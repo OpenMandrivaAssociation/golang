@@ -105,6 +105,7 @@
 
 %global go_api 1.11
 %global go_version 1.11
+%global golang_arches %{ix86} %{x86_64} %{armx}
 
 Name:           golang
 Version:        1.11
