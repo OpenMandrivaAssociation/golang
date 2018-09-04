@@ -105,7 +105,6 @@
 
 %global go_api 1.11
 %global go_version 1.11
-%global golang_arches %{ix86} %{x86_64} %{armx}
 
 Name:           golang
 Version:        1.11
@@ -196,9 +195,6 @@ Obsoletes:      %{name}-data < 1.1.1-4
 # go1.4 deprecates a few packages
 Obsoletes:      %{name}-vim < 1.4
 Obsoletes:      emacs-%{name} < 1.4
-
-# These are the only RHEL/Fedora architectures that we compile this package for
-ExclusiveArch:  %{golang_arches}
 
 Source100:      golang-gdbinit
 
