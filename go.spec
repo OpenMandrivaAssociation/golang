@@ -10,7 +10,7 @@
 
 Summary:	A compiled, garbage-collected, concurrent programming language
 Name:		go
-Version:	1.9.6
+Version:	1.11.5
 Release:	1
 Epoch:		1
 License:	BSD-3-Clause
@@ -178,6 +178,7 @@ safety of a static language.
 %{_libdir}/go/pkg/linux_%{go_arch}/os/exec.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os/signal.a
 %{_libdir}/go/pkg/linux_%{go_arch}/os/user.a
+%{_libdir}/go/pkg/linux_%{go_arch}/os/signal
 %{_libdir}/go/pkg/linux_%{go_arch}/path.a
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/path
 %{_libdir}/go/pkg/linux_%{go_arch}/path/filepath.a
@@ -227,17 +228,17 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode
 %dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2
-%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal/
-%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/*.a
-%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/chacha20poly1305/internal/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/cryptobyte
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/crypto/internal
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/unicode/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/text/secure/*.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http2/hpack.a
-%dir %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex
-%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/lex/httplex.a
 %{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/*.a
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/dns
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/http
+%{_libdir}/go/pkg/linux_%{go_arch}/vendor/golang_org/x/net/internal
 %dir %{_libdir}/go/pkg/tool
 %dir %{_libdir}/go/pkg/tool/linux_%{go_arch}
 %{_libdir}/go/pkg/tool/linux_%{go_arch}/*
@@ -246,6 +247,7 @@ safety of a static language.
 %dir %{_libdir}/go/pkg/bootstrap/pkg
 %dir %{_libdir}/go/pkg/bootstrap/src
 %dir %{_libdir}/go/pkg/bootstrap/src/bootstrap
+%{_libdir}/go/pkg/obj
 %{_libdir}/go/pkg/bootstrap/src/bootstrap/*
 %{_libdir}/go/pkg/bootstrap/bin/*
 %dir %{_libdir}/go/pkg/include
