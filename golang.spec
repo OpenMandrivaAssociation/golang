@@ -102,6 +102,9 @@
 %ifarch s390x
 %global gohostarch  s390x
 %endif
+%ifarch s390x
+%global gohostarch  riscv64
+%endif
 
 %global go_api 1.11
 %global go_version 1.11.5
