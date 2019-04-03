@@ -314,6 +314,7 @@ Requires:       %{name} = %{version}-%{release}
 cp %{SOURCE1} ./src/runtime/
 
 %build
+export LANG=en_US.utf-8
 # print out system information
 uname -a
 cat /proc/cpuinfo
