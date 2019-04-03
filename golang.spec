@@ -306,6 +306,8 @@ Requires:       %{name} = %{version}-%{release}
 %endif
 
 %prep
+export LANG=en_US.utf-8
+export LC_ALL=en_US.utf-8
 %setup -q -n go
 
 %patch1 -p1
