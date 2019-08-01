@@ -54,6 +54,9 @@
 %global __cc /usr/bin/gcc
 %global __cxx /usr/bin/g++
 %else
+# 1.12.7 dont like clang
+%global __cc /usr/bin/gcc
+%global __cxx /usr/bin/g++
 %global golang_bootstrap 1
 %endif
 
@@ -340,7 +343,7 @@ export CC="%{__cc}"
 export CXX="%{__cxx}"
 export CC_FOR_TARGET="%{__cc}"
 export CFLAGS="$RPM_OPT_FLAGS"
-export LDFLAGS="$RPM_LD_FLAGS"
+export LDFLAGS="%{ldflags}"
 export GOOS=linux
 export GOARCH=%{gohostarch}
 %if !%{external_linker}
@@ -467,7 +470,7 @@ export GOROOT=$(pwd -P)
 export PATH="$GOROOT"/bin:"$PATH"
 cd src
 
-export CC="gcc"
+export CC="%{__cc}"
 export CFLAGS="$RPM_OPT_FLAGS"
 export LDFLAGS="$RPM_LD_FLAGS"
 %if !%{external_linker}
