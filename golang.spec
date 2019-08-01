@@ -107,7 +107,7 @@
 %endif
 
 %global go_api 1.12
-%global go_version 1.12.3
+%global go_version 1.12.7
 
 Name:           golang
 Version:        1.12.3
