@@ -42,7 +42,7 @@
 %endif
 
 # Build golang with cgo enabled/disabled(later equals more or less to internal linking).
-%ifarch %{ix86} %{x86_64} ppc64le %{arm} aarch64 s390x
+%ifarch %{ix86} %{x86_64} ppc64le %{armx} s390x
 %global cgo_enabled 1
 %else
 %global cgo_enabled 0
@@ -110,10 +110,10 @@
 %endif
 
 %global go_api 1.13
-%global go_version 1.13.3
+%global go_version 1.13.8
 
 Name:           golang
-Version:        1.13.3
+Version:        1.13.8
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
