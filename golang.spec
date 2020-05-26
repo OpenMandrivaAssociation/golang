@@ -109,10 +109,10 @@
 %global gohostarch  riscv64
 %endif
 
-%global go_api 1.13
+%global go_api 1.14
 
 Name:           golang
-Version:        1.13.9
+Version:        1.14.3
 Release:        1%{?dist}
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
