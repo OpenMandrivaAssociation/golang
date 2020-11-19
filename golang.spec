@@ -134,6 +134,7 @@ BuildRequires:  pcre-devel
 BuildRequires:  glibc-static-devel
 BuildRequires:  perl-interpreter
 BuildRequires:  procps-ng
+BuildRequires:  timezone
 
 Provides:       go = %{version}-%{release}
 
