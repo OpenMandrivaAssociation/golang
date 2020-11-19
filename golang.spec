@@ -112,8 +112,8 @@
 %global go_api 1.15
 
 Name:           golang
-Version:        1.15.4
-Release:        1%{?dist}
+Version:        1.15.5
+Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
@@ -128,13 +128,12 @@ BuildRequires:  gcc-go >= 5
 %else
 BuildRequires:  golang > 1.4
 %endif
-%if 0%{?rhel} > 6 || 0%{?fedora} > 0
 BuildRequires:  hostname
-%else
-BuildRequires:  net-tools
-%endif
 # for tests
-BuildRequires:  pcre-devel, glibc-static-devel, perl-interpreter, procps-ng
+BuildRequires:  pcre-devel
+BuildRequires:  glibc-static-devel
+BuildRequires:  perl-interpreter
+BuildRequires:  procps-ng
 
 Provides:       go = %{version}-%{release}
 
@@ -274,8 +273,11 @@ Requires(postun): %{_sbindir}/update-alternatives
 # We strip the meta dependency, but go does require glibc.
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
-Requires:       gcc
-Requires:       git, subversion, mercurial
+Requires:	%{__cc}
+Requires:       git
+Requires:       subversion
+Requires:       mercurial
+
 %description    bin
 %{summary}
 
@@ -341,8 +343,8 @@ pushd src
 export CC="%{__cc}"
 export CXX="%{__cxx}"
 export CC_FOR_TARGET="%{__cc}"
-export CFLAGS="$RPM_OPT_FLAGS"
-export LDFLAGS="%{ldflags}"
+export CFLAGS="%{optflags}"
+export LDFLAGS="%{build_ldflags}"
 export GOOS=linux
 export GOARCH=%{gohostarch}
 %if !%{external_linker}
@@ -470,8 +472,8 @@ export PATH="$GOROOT"/bin:"$PATH"
 cd src
 
 export CC="%{__cc}"
-export CFLAGS="$RPM_OPT_FLAGS"
-export LDFLAGS="$RPM_LD_FLAGS"
+export CFLAGS="%{optflags}"
+export LDFLAGS="%{build_ldflags}"
 %if !%{external_linker}
 export GO_LDFLAGS="-linkmode internal"
 %endif
@@ -489,7 +491,6 @@ export GO_TEST_TIMEOUT_SCALE=2
 %endif
 cd ..
 
-
 %post bin
 %{_sbindir}/update-alternatives --install %{_bindir}/go \
     go %{goroot}/bin/go 90 \
@@ -499,7 +500,6 @@ cd ..
 if [ $1 = 0 ]; then
     %{_sbindir}/update-alternatives --remove go %{goroot}/bin/go
 fi
-
 
 %files
 %doc AUTHORS CONTRIBUTORS LICENSE PATENTS
@@ -527,7 +527,6 @@ fi
 %dir %{gopath}/src/code.google.com/p/
 %dir %{gopath}/src/golang.org
 %dir %{gopath}/src/golang.org/x
-
 
 # gdbinit (for gdb debugging)
 %{_sysconfdir}/gdbinit.d
