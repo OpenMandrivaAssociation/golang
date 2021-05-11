@@ -112,7 +112,7 @@
 %global go_api 1.15
 
 Name:           golang
-Version:        1.15.6
+Version:        1.16.4
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
