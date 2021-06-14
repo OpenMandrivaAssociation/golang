@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 # temporalily ignore test failures
 %ifarch %{ix86} aarch64 %{arm}
 %bcond_without ignore_tests
@@ -112,7 +112,7 @@
 %global go_api 1.15
 
 Name:           golang
-Version:        1.15.6
+Version:        1.15.12
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -188,8 +188,9 @@ Requires:       %{name}-bin = %{version}-%{release}
 Requires:       %{name}-src = %{version}-%{release}
 Requires:       go-srpm-macros
 
-Patch1:       0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
-Patch2:       0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
+Patch1:         0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
+Patch2:         0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
+Patch3:         0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
@@ -274,13 +275,13 @@ Requires(postun): %{_sbindir}/update-alternatives
 # We strip the meta dependency, but go does require glibc.
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
-Requires:	%{__cc}
+Requires:       %{__cc}
 Requires:       git
 Requires:       subversion
 Requires:       mercurial
 
 %description    bin
-%{summary}
+%{summary}.
 
 # Workaround old RPM bug of symlink-replaced-with-dir failure
 %pretrans -p <lua>
@@ -313,10 +314,7 @@ Requires:       %{name} = %{version}-%{release}
 %prep
 export LANG=en_US.utf-8
 export LC_ALL=en_US.utf-8
-%setup -q -n go
-
-%patch1 -p1
-%patch2 -p1
+%autosetup -p1 -n go
 
 cp %{SOURCE1} ./src/runtime/
 
@@ -354,7 +352,7 @@ export GO_LDFLAGS="-linkmode internal"
 %if !%{cgo_enabled}
 export CGO_ENABLED=0
 %endif
-GOARCH=%{gohostarch} GOOS=%{_os} ./make.bash --no-clean -v
+./make.bash --no-clean -v
 popd
 
 # build shared std lib
@@ -421,9 +419,8 @@ pushd %{buildroot}%{goroot}
         echo "%%{goroot}/$file" >> $shared_list
         echo "%%{golibdir}/$(basename $file)" >> $shared_list
     done
-    
-	find pkg/*_dynlink/ -type d -printf '%%%dir %{goroot}/%p\n' >> $shared_list
-	find pkg/*_dynlink/ ! -type d -printf '%{goroot}/%p\n' >> $shared_list
+    find pkg/*_dynlink/ -type d -printf '%%%dir %{goroot}/%p\n' >> $shared_list
+    find pkg/*_dynlink/ ! -type d -printf '%{goroot}/%p\n' >> $shared_list
 %endif
 
 %if %{race}
