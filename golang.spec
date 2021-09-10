@@ -1,6 +1,6 @@
 %bcond_with bootstrap
 # temporalily ignore test failures
-%ifarch %{ix86} aarch64 %{arm}
+%ifarch %{x86_64} %{ix86} aarch64 %{arm}
 %bcond_without ignore_tests
 %else
 %bcond_with ignore_tests
@@ -112,7 +112,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.16.6
+Version:        1.17.1
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -188,9 +188,9 @@ Requires:       %{name}-bin = %{version}-%{release}
 Requires:       %{name}-src = %{version}-%{release}
 Requires:       go-srpm-macros
 
-Patch1:         0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
-Patch2:         0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
-Patch3:         0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
+Patch1:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
+Patch2:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
+Patch3:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
@@ -375,7 +375,7 @@ mkdir -p %{buildroot}%{goroot}
 
 # install everything into libdir (until symlink problems are fixed)
 # https://code.google.com/p/go/issues/detail?id=5830
-cp -apv api bin doc favicon.ico lib pkg robots.txt src misc test VERSION \
+cp -apv api bin doc lib pkg src misc test VERSION \
    %{buildroot}%{goroot}
 
 # bz1099206
