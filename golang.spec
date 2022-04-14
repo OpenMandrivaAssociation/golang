@@ -1,3 +1,5 @@
+%define _duplicate_files_terminate_build   0
+
 %bcond_with bootstrap
 # temporalily ignore test failures
 %ifarch %{x86_64} %{ix86} aarch64 %{arm}
@@ -112,8 +114,8 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.17.6
-Release:        1
+Version:        1.18.1
+Release:        2
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
