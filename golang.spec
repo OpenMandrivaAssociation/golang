@@ -21,13 +21,16 @@
 
 # Do not check any files in doc or src for requires
 %global __requires_exclude_from ^(%{_datadir}|/usr/lib)/%{name}/(doc|src)/.*$
+# Seems to be the result of the shell parser screwing up on something
+# in -src
+%global __requires_exclude ^/bin/rc$
 
 # Don't alter timestamps of especially the .a files (or else go will rebuild later)
 # Actually, don't strip at all since we are not even building debug packages and this corrupts the dwarf testdata
 %global __strip /bin/true
 
 # rpmbuild magic to keep from having meta dependency on libc.so.6
-%define _use_internal_dependency_generator 0
+#define _use_internal_dependency_generator 0
 %define __find_requires %{nil}
 %global __spec_install_post /usr/lib/rpm/check-rpaths   /usr/lib/rpm/check-buildroot  \
   /usr/lib/rpm/brp-compress
@@ -114,8 +117,8 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.18.1
-Release:        2
+Version:        1.18.3
+Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
@@ -271,9 +274,6 @@ Obsoletes:      %{name}-pkg-openbsd-amd64 < 1.4.99
 Obsoletes:      golang-vet < 0-12.1
 Obsoletes:      golang-cover < 0-12.1
 
-Requires(post): %{_sbindir}/update-alternatives
-Requires(postun): %{_sbindir}/update-alternatives
-
 # We strip the meta dependency, but go does require glibc.
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
@@ -351,7 +351,9 @@ export GOARCH=%{gohostarch}
 %if !%{external_linker}
 export GO_LDFLAGS="-linkmode internal"
 %endif
-%if !%{cgo_enabled}
+%if %{cgo_enabled}
+export CGO_ENABLED=1
+%else
 export CGO_ENABLED=0
 %endif
 ./make.bash --no-clean -v
@@ -385,61 +387,6 @@ find %{buildroot}%{goroot}/src -exec touch -r %{buildroot}%{goroot}/VERSION "{}"
 # and level out all the built archives
 touch %{buildroot}%{goroot}/pkg
 find %{buildroot}%{goroot}/pkg -exec touch -r %{buildroot}%{goroot}/pkg "{}" \;
-# generate the spec file ownership of this source tree and packages
-cwd=$(pwd)
-src_list=$cwd/go-src.list
-pkg_list=$cwd/go-pkg.list
-shared_list=$cwd/go-shared.list
-race_list=$cwd/go-race.list
-misc_list=$cwd/go-misc.list
-docs_list=$cwd/go-docs.list
-tests_list=$cwd/go-tests.list
-rm -f $src_list $pkg_list $docs_list $misc_list $tests_list $shared_list $race_list
-touch $src_list $pkg_list $docs_list $misc_list $tests_list $shared_list $race_list
-pushd %{buildroot}%{goroot}
-    find src/ -type d -a \( ! -name testdata -a ! -ipath '*/testdata/*' \) -printf '%%%dir %{goroot}/%p\n' >> $src_list
-    find src/ ! -type d -a \( ! -ipath '*/testdata/*' -a ! -name '*_test.go' \) -printf '%{goroot}/%p\n' >> $src_list
-
-    find bin/ pkg/ -type d -a ! -path '*_dynlink/*' -a ! -path '*_race/*' -printf '%%%dir %{goroot}/%p\n' >> $pkg_list
-    find bin/ pkg/ ! -type d -a ! -path '*_dynlink/*' -a ! -path '*_race/*' -printf '%{goroot}/%p\n' >> $pkg_list
-
-    find doc/ -type d -printf '%%%dir %{goroot}/%p\n' >> $docs_list
-    find doc/ ! -type d -printf '%{goroot}/%p\n' >> $docs_list
-
-    find misc/ -type d -printf '%%%dir %{goroot}/%p\n' >> $misc_list
-    find misc/ ! -type d -printf '%{goroot}/%p\n' >> $misc_list
-
-%if %{shared}
-    mkdir -p %{buildroot}/%{_libdir}/
-    mkdir -p %{buildroot}/%{golibdir}/
-    for file in $(find .  -iname "*.so" ); do
-        chmod 755 $file
-        mv  $file %{buildroot}/%{golibdir}
-        pushd $(dirname $file)
-        ln -fs %{golibdir}/$(basename $file) $(basename $file)
-        popd
-        echo "%%{goroot}/$file" >> $shared_list
-        echo "%%{golibdir}/$(basename $file)" >> $shared_list
-    done
-    find pkg/*_dynlink/ -type d -printf '%%%dir %{goroot}/%p\n' >> $shared_list
-    find pkg/*_dynlink/ ! -type d -printf '%{goroot}/%p\n' >> $shared_list
-%endif
-
-%if %{race}
-
-    find pkg/*_race/ -type d -printf '%%%dir %{goroot}/%p\n' >> $race_list
-    find pkg/*_race/ ! -type d -printf '%{goroot}/%p\n' >> $race_list
-
-%endif
-
-    find test/ -type d -printf '%%%dir %{goroot}/%p\n' >> $tests_list
-    find test/ ! -type d -printf '%{goroot}/%p\n' >> $tests_list
-    find src/ -type d -a \( -name testdata -o -ipath '*/testdata/*' \) -printf '%%%dir %{goroot}/%p\n' >> $tests_list
-    find src/ ! -type d -a \( -ipath '*/testdata/*' -o -name '*_test.go' \) -printf '%{goroot}/%p\n' >> $tests_list
-    # this is only the zoneinfo.zip
-    find lib/ -type d -printf '%%%dir %{goroot}/%p\n' >> $tests_list
-    find lib/ ! -type d -printf '%{goroot}/%p\n' >> $tests_list
-popd
 
 # remove the doc Makefile
 rm -rfv %{buildroot}%{goroot}/doc/Makefile
@@ -456,15 +403,15 @@ mkdir -p %{buildroot}%{gopath}/src/bitbucket.org
 mkdir -p %{buildroot}%{gopath}/src/code.google.com/p
 mkdir -p %{buildroot}%{gopath}/src/golang.org/x
 
-# make sure these files exist and point to alternatives
-rm -f %{buildroot}%{_bindir}/go
-ln -sf /etc/alternatives/go %{buildroot}%{_bindir}/go
-rm -f %{buildroot}%{_bindir}/gofmt
-ln -sf /etc/alternatives/gofmt %{buildroot}%{_bindir}/gofmt
-
 # gdbinit
 mkdir -p %{buildroot}%{_sysconfdir}/gdbinit.d
 cp -av %{SOURCE100} %{buildroot}%{_sysconfdir}/gdbinit.d/golang.gdb
+
+WD="$(pwd)"
+cd %{buildroot}
+find .%{goroot}/src -name testdata |sed -e 's,^\.,,' >$WD/testfiles.list
+find .%{goroot}/src -name "*_test.go" |grep -v '/testdata/' |sed -e 's,^\.,,' >>$WD/testfiles.list
+sed -e 's,^,%exclude ,' $WD/testfiles.list >$WD/testfiles-x.list
 
 %check
 export GOROOT=$(pwd -P)
@@ -491,32 +438,18 @@ export GO_TEST_TIMEOUT_SCALE=2
 %endif
 cd ..
 
-%post bin
-%{_sbindir}/update-alternatives --install %{_bindir}/go \
-    go %{goroot}/bin/go 90 \
-    --slave %{_bindir}/gofmt gofmt %{goroot}/bin/gofmt
-
-%preun bin
-if [ $1 = 0 ]; then
-    %{_sbindir}/update-alternatives --remove go %{goroot}/bin/go
-fi
+for i in go gofmt; do
+	ln -s ../lib/lib/golang/bin/$i %{buildroot}%{_bindir}/
+done
 
 %files
 %doc AUTHORS CONTRIBUTORS LICENSE PATENTS
 # VERSION has to be present in the GOROOT, for `go install std` to work
-%doc %{goroot}/VERSION
-%dir %{goroot}/doc
-%doc %{goroot}/doc/*
-
-# go files
+%{goroot}/VERSION
 %dir %{goroot}
-%exclude %{goroot}/bin/
-%exclude %{goroot}/pkg/
-%exclude %{goroot}/src/
-%exclude %{goroot}/doc/
-%exclude %{goroot}/misc/
-%exclude %{goroot}/test/
-%{goroot}/*
+%{goroot}/api
+%dir %{goroot}/lib
+%{goroot}/lib/time
 
 # ensure directory ownership, so they are cleaned up if empty
 %dir %{gopath}
@@ -529,24 +462,41 @@ fi
 %dir %{gopath}/src/golang.org/x
 
 # gdbinit (for gdb debugging)
-%{_sysconfdir}/gdbinit.d
+%{_sysconfdir}/gdbinit.d/golang.gdb
 
-%files -f go-src.list src
+%files src -f testfiles-x.list
+%{goroot}/src
+%exclude %{goroot}/src/archive/tar/*_test.go
+%exclude %{goroot}/src/archive/tar/testdata
+%exclude %{goroot}/src/archive/zip/*_test.go
+%exclude %{goroot}/src/archive/zip/testdata
 
-%files -f go-docs.list docs
+%files docs
+%doc %{goroot}/doc
 
-%files -f go-misc.list misc
+%files misc
+%{goroot}/misc
 
-%files -f go-tests.list tests
+%files tests -f testfiles.list
+%{goroot}/test
 
-%files -f go-pkg.list bin
+%files bin
 %{_bindir}/go
 %{_bindir}/gofmt
+%{goroot}/bin
+%{goroot}/pkg/linux_*
+%{goroot}/pkg/include
+%exclude %{goroot}/pkg/linux_*_dynlink
+%exclude %{goroot}/pkg/linux_*_race
+%{goroot}/pkg/obj
+%{goroot}/pkg/tool
 
 %if %{shared}
-%files -f go-shared.list shared
+%files shared
+%{goroot}/pkg/linux_*_dynlink
 %endif
 
 %if %{race}
-%files -f go-race.list race
+%files race
+%{goroot}/pkg/linux_*_race
 %endif
