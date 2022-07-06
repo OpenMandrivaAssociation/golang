@@ -59,9 +59,6 @@
 %global __cc /usr/bin/gcc
 %global __cxx /usr/bin/g++
 %else
-# 1.12.7 dont like clang
-%global __cc /usr/bin/gcc
-%global __cxx /usr/bin/g++
 %global golang_bootstrap 1
 %endif
 
@@ -118,7 +115,7 @@
 
 Name:           golang
 Version:        1.18.3
-Release:        1
+Release:        2
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
@@ -196,6 +193,9 @@ Requires:       go-srpm-macros
 Patch1:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 Patch2:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
 Patch3:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
+
+# Our clang default to --gc-sections
+Patch10:	https://patch-diff.githubusercontent.com/raw/golang/go/pull/53028.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
@@ -439,7 +439,7 @@ export GO_TEST_TIMEOUT_SCALE=2
 cd ..
 
 for i in go gofmt; do
-	ln -s ../lib/lib/golang/bin/$i %{buildroot}%{_bindir}/
+	ln -s ../lib/golang/bin/$i %{buildroot}%{_bindir}/
 done
 
 %files
