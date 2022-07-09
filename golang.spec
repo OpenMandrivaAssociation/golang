@@ -314,8 +314,8 @@ Requires:       %{name} = %{version}-%{release}
 %endif
 
 %prep
-export LANG=en_US.utf-8
-export LC_ALL=en_US.utf-8
+export LANG=C.utf-8
+export LC_ALL=C.utf-8
 %autosetup -p1 -n go
 
 cp %{SOURCE1} ./src/runtime/
