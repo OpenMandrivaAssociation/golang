@@ -131,6 +131,7 @@ BuildRequires:  gcc-go >= 5
 BuildRequires:  golang > 1.4
 %endif
 BuildRequires:  hostname
+BuildRequires:	locales-en >= 2.35-9
 # for tests
 BuildRequires:  pcre-devel
 BuildRequires:  glibc-static-devel
