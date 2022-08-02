@@ -114,7 +114,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.18.4
+Version:        1.19
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -191,12 +191,8 @@ Requires:       %{name}-bin = %{version}-%{release}
 Requires:       %{name}-src = %{version}-%{release}
 Requires:       go-srpm-macros
 
-Patch1:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0001-Don-t-use-the-bundled-tzdata-at-runtime-except-for-t.patch
 Patch2:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
 Patch3:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
-
-# Our clang default to --gc-sections
-Patch10:	https://patch-diff.githubusercontent.com/raw/golang/go/pull/53028.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
@@ -444,7 +440,7 @@ for i in go gofmt; do
 done
 
 %files
-%doc AUTHORS CONTRIBUTORS LICENSE PATENTS
+%doc LICENSE PATENTS
 # VERSION has to be present in the GOROOT, for `go install std` to work
 %{goroot}/VERSION
 %dir %{goroot}
