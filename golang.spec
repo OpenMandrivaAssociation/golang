@@ -76,13 +76,6 @@
 %global shared 0
 %endif
 
-# Pre build std lib with -race enabled
-%ifarch %{x86_64}
-%global race 1
-%else
-%global race 0
-%endif
-
 # Fedora GOROOT
 %global goroot          /usr/lib/%{name}
 
@@ -114,7 +107,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.19.2
+Version:        1.20.1
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -300,16 +293,6 @@ Summary:        Golang shared object libraries
 %{summary}.
 %endif
 
-%if %{race}
-%package        race
-Summary:        Golang std library with -race enabled
-
-Requires:       %{name} = %{version}-%{release}
-
-%description    race
-%{summary}
-%endif
-
 %prep
 export LANG=C.utf-8
 export LC_ALL=C.utf-8
@@ -359,10 +342,6 @@ popd
 # build shared std lib
 %if %{shared}
 GOROOT=$(pwd) PATH=$(pwd)/bin:$PATH go install -buildmode=shared -v -x std
-%endif
-
-%if %{race}
-GOROOT=$(pwd) PATH=$(pwd)/bin:$PATH go install -race -v -x std
 %endif
 
 %install
@@ -484,16 +463,9 @@ done
 %{goroot}/pkg/linux_*
 %{goroot}/pkg/include
 %exclude %{goroot}/pkg/linux_*_dynlink
-%exclude %{goroot}/pkg/linux_*_race
-%{goroot}/pkg/obj
 %{goroot}/pkg/tool
 
 %if %{shared}
 %files shared
 %{goroot}/pkg/linux_*_dynlink
-%endif
-
-%if %{race}
-%files race
-%{goroot}/pkg/linux_*_race
 %endif
