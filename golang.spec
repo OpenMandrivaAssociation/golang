@@ -187,6 +187,9 @@ Requires:       go-srpm-macros
 Patch2:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
 Patch3:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
 
+# We no longer ship gold
+Patch100:	go-no-ld.gold.patch
+
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
 
