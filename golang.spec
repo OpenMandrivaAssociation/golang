@@ -107,7 +107,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.20.7
+Version:        1.21.0
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -183,9 +183,6 @@ Provides: bundled(golang(golang.org/x/sys/windows/registry))
 Requires:       %{name}-bin = %{version}-%{release}
 Requires:       %{name}-src = %{version}-%{release}
 Requires:       go-srpm-macros
-
-Patch2:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0002-syscall-expose-IfInfomsg.X__ifi_pad-on-s390x.patch
-Patch3:         https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0003-cmd-go-disable-Google-s-proxy-and-sumdb.patch
 
 # We no longer ship gold
 Patch100:	go-no-ld.gold.patch

@@ -1,27 +1,31 @@
-diff -up go/src/cmd/link/internal/ld/lib.go.omv~ go/src/cmd/link/internal/ld/lib.go
---- go/src/cmd/link/internal/ld/lib.go.omv~	2023-08-02 16:56:43.692230385 +0200
-+++ go/src/cmd/link/internal/ld/lib.go	2023-08-02 16:58:11.191968100 +0200
-@@ -1555,18 +1555,18 @@ func (ctxt *Link) hostlink() {
- 			// On ARM64, the GNU linker will fail instead of
- 			// generating COPY relocations.
- 			//
--			// In both cases, switch to gold.
+diff -up go/src/cmd/link/internal/ld/lib.go.1~ go/src/cmd/link/internal/ld/lib.go
+--- go/src/cmd/link/internal/ld/lib.go.1~	2023-08-08 23:54:39.134946641 +0200
++++ go/src/cmd/link/internal/ld/lib.go	2023-08-08 23:57:36.512641993 +0200
+@@ -1600,20 +1600,20 @@ func (ctxt *Link) hostlink() {
+ 		if ctxt.Arch.InFamily(sys.ARM64) && buildcfg.GOOS == "linux" {
+ 			// On ARM64, the GNU linker will fail with
+ 			// -znocopyreloc if it thinks a COPY relocation is
+-			// required. Switch to gold.
++			// required. Switch to lld.
+ 			// https://sourceware.org/bugzilla/show_bug.cgi?id=19962
+ 			// https://go.dev/issue/22040
 -			altLinker = "gold"
-+			// In both cases, switch to lld.
 +			altLinker = "lld"
  
- 			// If gold is not installed, gcc will silently switch
+-			// If gold is not installed, gcc will silently switch
++			// If lld is not installed, gcc will silently switch
  			// back to ld.bfd. So we parse the version information
- 			// and provide a useful error if gold is missing.
+-			// and provide a useful error if gold is missing.
++			// and provide a useful error if lld is missing.
  			name, args := flagExtld[0], flagExtld[1:]
 -			args = append(args, "-fuse-ld=gold", "-Wl,--version")
 +			args = append(args, "-fuse-ld=lld", "-Wl,--version")
  			cmd := exec.Command(name, args...)
  			if out, err := cmd.CombinedOutput(); err == nil {
 -				if !bytes.Contains(out, []byte("GNU gold")) {
--					log.Fatalf("ARM external linker must be gold (issue #15696), but is not: %s", out)
+-					log.Fatalf("ARM64 external linker must be gold (issue #15696, 22040), but is not: %s", out)
 +				if !bytes.Contains(out, []byte("LLD")) {
-+					log.Fatalf("ARM external linker must be lld, but is not: %s", out)
++					log.Fatalf("ARM64 external linker must not be bfd (issue #15696, 22040), but is: %s", out)
  				}
  			}
  		}
