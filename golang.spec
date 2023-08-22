@@ -76,8 +76,8 @@
 %global shared 0
 %endif
 
-# Fedora GOROOT
-%global goroot          /usr/lib/%{name}
+# OpenMandriva GOROOT
+%global goroot          %{_prefix}/lib/%{name}
 
 %ifarch %{x86_64}
 %global gohostarch  amd64
@@ -108,7 +108,7 @@
 
 Name:           golang
 Version:        1.21.0
-Release:        2
+Release:        3
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
@@ -420,6 +420,14 @@ for i in go gofmt; do
 	ln -s ../lib/golang/bin/$i %{buildroot}%{_bindir}/
 done
 
+# Set some sane defaults
+# https://github.com/golang/go/issues/61928
+cat >%{buildroot}%{goroot}/go.env <<EOF
+GOPROXY=direct
+GOSUMDB=off
+GOTOOLCHAIN=local
+EOF
+
 %files
 %doc LICENSE PATENTS
 # VERSION has to be present in the GOROOT, for `go install std` to work
@@ -428,6 +436,7 @@ done
 %{goroot}/api
 %dir %{goroot}/lib
 %{goroot}/lib/time
+%config %{goroot}/go.env
 
 # ensure directory ownership, so they are cleaned up if empty
 %dir %{gopath}
