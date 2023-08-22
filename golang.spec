@@ -108,7 +108,7 @@
 
 Name:           golang
 Version:        1.21.0
-Release:        1
+Release:        2
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
@@ -183,6 +183,8 @@ Provides: bundled(golang(golang.org/x/sys/windows/registry))
 Requires:       %{name}-bin = %{version}-%{release}
 Requires:       %{name}-src = %{version}-%{release}
 Requires:       go-srpm-macros
+
+Patch:		https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0001-Modify-go.env.patch
 
 # We no longer ship gold
 Patch100:	go-no-ld.gold.patch
