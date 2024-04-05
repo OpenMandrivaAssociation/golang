@@ -107,7 +107,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.21.5
+Version:        1.22.2
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -270,9 +270,9 @@ Obsoletes:      golang-cover < 0-12.1
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
 Requires:       %{__cc}
-Requires:       git
-Requires:       subversion
-Requires:       mercurial
+Recommends:     git
+Recommends:     subversion
+Recommends:     mercurial
 
 %description    bin
 %{summary}.
