@@ -112,7 +112,7 @@ Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
-URL:            http://golang.org/
+URL:            https://golang.org/
 Source0:        https://storage.googleapis.com/golang/go%{version}.src.tar.gz
 # make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
 Source1:        fedora.go
