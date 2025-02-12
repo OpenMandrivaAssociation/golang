@@ -466,6 +466,8 @@ EOF
 
 %files tests -f testfiles.list
 %{goroot}/test
+%{_prefix}/lib/golang/lib/fips140/
+%{_prefix}/lib/golang/lib/wasm/
 
 %files bin
 %{_bindir}/go
