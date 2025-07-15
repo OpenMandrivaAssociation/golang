@@ -2,7 +2,7 @@
 
 %bcond_with bootstrap
 # temporalily ignore test failures
-%ifarch %{x86_64} %{ix86} aarch64 %{arm}
+%ifarch %{x86_64} %{ix86} %{aarch64} %{arm}
 %bcond_without ignore_tests
 %else
 %bcond_with ignore_tests
@@ -40,7 +40,7 @@
 # Golang build options.
 
 # Build golang using external/internal(close to cgo disabled) linking.
-%ifarch %{ix86} %{x86_64} ppc64le %{arm} aarch64 s390x
+%ifarch %{ix86} %{x86_64} ppc64le %{arm} %{aarch64} s390x
 %global external_linker 1
 %else
 %global external_linker 0
@@ -70,7 +70,7 @@
 %endif
 
 # Build golang shared objects for stdlib
-%ifarch %{ix86} %{x86_64} ppc64le %{arm} aarch64
+%ifarch %{ix86} %{x86_64} ppc64le %{arm} %{aarch64}
 %global shared 1
 %else
 %global shared 0
@@ -88,7 +88,7 @@
 %ifarch %{arm}
 %global gohostarch  arm
 %endif
-%ifarch aarch64
+%ifarch %{aarch64}
 %global gohostarch  arm64
 %endif
 %ifarch ppc64
@@ -100,14 +100,14 @@
 %ifarch s390x
 %global gohostarch  s390x
 %endif
-%ifarch riscv64
-%global gohostarch  riscv64
+%ifarch %{riscv64}
+%global gohostarch  %{riscv64}
 %endif
 
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.24.2
+Version:        1.24.5
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
