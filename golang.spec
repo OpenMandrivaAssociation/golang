@@ -107,7 +107,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.25.7
+Version:        1.26.0
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -437,6 +437,7 @@ EOF
 %dir %{goroot}/lib
 %{goroot}/lib/time
 %config %{goroot}/go.env
+%{goroot}/lib/hg
 
 # ensure directory ownership, so they are cleaned up if empty
 %dir %{gopath}
