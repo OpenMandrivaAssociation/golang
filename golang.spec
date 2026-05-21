@@ -107,7 +107,7 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.26.2
+Version:        1.26.3
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
@@ -186,8 +186,8 @@ Requires:       go-srpm-macros
 
 Patch:		https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0001-Modify-go.env.patch
 
-# We no longer ship gold
-Patch100:	go-no-ld.gold.patch
+# Use LLD like everything else
+Patch100:	go-use-lld.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
