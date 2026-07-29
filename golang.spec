@@ -2,7 +2,7 @@
 
 %bcond_with bootstrap
 # temporalily ignore test failures
-%ifarch %{x86_64} %{ix86} aarch64 %{arm}
+%ifarch %{x86_64} %{ix86} %{aarch64} %{arm}
 %bcond_without ignore_tests
 %else
 %bcond_with ignore_tests
@@ -40,7 +40,7 @@
 # Golang build options.
 
 # Build golang using external/internal(close to cgo disabled) linking.
-%ifarch %{ix86} %{x86_64} ppc64le %{arm} aarch64 s390x
+%ifarch %{ix86} %{x86_64} ppc64le %{arm} %{aarch64} s390x
 %global external_linker 1
 %else
 %global external_linker 0
@@ -70,7 +70,7 @@
 %endif
 
 # Build golang shared objects for stdlib
-%ifarch %{ix86} %{x86_64} ppc64le %{arm} aarch64
+%ifarch %{ix86} %{x86_64} ppc64le %{arm} %{aarch64}
 %global shared 1
 %else
 %global shared 0
@@ -88,7 +88,7 @@
 %ifarch %{arm}
 %global gohostarch  arm
 %endif
-%ifarch aarch64
+%ifarch %{aarch64}
 %global gohostarch  arm64
 %endif
 %ifarch ppc64
@@ -100,20 +100,20 @@
 %ifarch s390x
 %global gohostarch  s390x
 %endif
-%ifarch riscv64
-%global gohostarch  riscv64
+%ifarch %{riscv64}
+%global gohostarch  %{riscv64}
 %endif
 
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.24.2
+Version:        1.26.5
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
 URL:            https://golang.org/
-Source0:        https://storage.googleapis.com/golang/go%{version}.src.tar.gz
+Source0:        https://go.dev/dl/go%{version}.src.tar.gz
 # make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
 Source1:        fedora.go
 
@@ -186,8 +186,8 @@ Requires:       go-srpm-macros
 
 Patch:		https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/0001-Modify-go.env.patch
 
-# We no longer ship gold
-Patch100:	go-no-ld.gold.patch
+# Use LLD like everything else
+Patch100:	go-use-lld.patch
 
 # Having documentation separate was broken
 Obsoletes:      %{name}-docs < 1.1-4
@@ -437,6 +437,7 @@ EOF
 %dir %{goroot}/lib
 %{goroot}/lib/time
 %config %{goroot}/go.env
+%{goroot}/lib/hg
 
 # ensure directory ownership, so they are cleaned up if empty
 %dir %{gopath}
