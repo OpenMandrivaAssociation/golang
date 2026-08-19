@@ -1,7 +1,7 @@
 diff -up go/src/cmd/link/internal/ld/lib.go.2~ go/src/cmd/link/internal/ld/lib.go
---- go/src/cmd/link/internal/ld/lib.go.2~	2026-05-04 22:36:18.000000000 +0200
-+++ go/src/cmd/link/internal/ld/lib.go	2026-05-21 23:12:26.220320079 +0200
-@@ -1694,57 +1694,7 @@ func (ctxt *Link) hostlink() {
+--- go/src/cmd/link/internal/ld/lib.go.2~	2026-08-18 23:24:23.000000000 +0200
++++ go/src/cmd/link/internal/ld/lib.go	2026-08-19 20:42:33.239905496 +0200
+@@ -1714,57 +1714,7 @@ func (ctxt *Link) hostlink() {
  		// from the beginning of the section (like sym.STYPE).
  		argv = append(argv, "-Wl,-z,nocopyreloc")
  
