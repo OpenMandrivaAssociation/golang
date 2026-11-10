@@ -107,11 +107,12 @@
 %global go_api %(echo %{version}|cut -d. -f1.2)
 
 Name:           golang
-Version:        1.27.3
+Version:        1.27.4
 Release:        1
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD and Public Domain
+Group:          Development/Languages
 URL:            https://golang.org/
 Source0:        https://go.dev/dl/go%{version}.src.tar.gz
 # make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
